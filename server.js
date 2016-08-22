@@ -18,14 +18,16 @@ function openSocket(socket){
 	console.log('New client: ' + socket.handshake.address);
 
 	socket.on('message', function(data) {
-    if(data.startsWith("007"))
+		/*
+		if(data.startsWith("007"))
       data ='42#OK';
     else {
       data ='OK';
     }
     socket.emit('message', data);
+		*/
 
-    //sp.write(data);
+    sp.write(data);
     console.log('Sent: ' + data);
 	});
 
