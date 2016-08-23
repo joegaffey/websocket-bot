@@ -1,5 +1,4 @@
 var robot = {};
-
 var socket = io();
 
 var actions = {};
@@ -10,8 +9,20 @@ actions.right = '003#';
 actions.left = '004#';
 actions.ledOn = '005#';
 actions.ledOff = '006#';
-actions.distance = '007#';
-actions.blink = '008#';
+
+var
+var sensors = {};
+sensors.distance = -1;
+
+socket.on('message', function (data) {
+  if(data.includes('#'))
+     sensors.distance = parseInt(data.substring(0, data.indexOf('#')));
+  if(sensors.distance < min_diatance)
+    warn();
+});
+
+
+
 
 robot.left = function(time) {
   socket.emit('message', actions.left + '#' + time + ';');
@@ -65,9 +76,5 @@ robot.stop = function() {
 };
 
 robot.get_distance = function() {
-  socket.emit('message', actions.distance + ';');
-  socket.on('message', function (data) {
-    console.log("Received: " + data);
-    //TBD - how to get the data back to Blockly?
-  });
+  return sensors.distance;
 };
