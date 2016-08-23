@@ -10,69 +10,47 @@ actions.left = '004#';
 actions.ledOn = '005#';
 actions.ledOff = '006#';
 
-var
+var min_distance = 8;
 var sensors = {};
 sensors.distance = -1;
 
-socket.on('message', function (data) {
-  if(data.includes('#'))
-     sensors.distance = parseInt(data.substring(0, data.indexOf('#')));
-  if(sensors.distance < min_diatance)
-    warn();
+socket.on('distance', function (data) {
+  sensors.distance = parseInt(data);
+  if(sensors.distance < min_distance)
+    crash();
 });
 
-
-
+function crash() {
+  socket.emit('message', actions.stop + ';');
+}
 
 robot.left = function(time) {
   socket.emit('message', actions.left + '#' + time + ';');
-  socket.on('message', function (data) {
-    console.log("Received: " + data);
-  });
 };
 
 robot.right = function(time) {
   socket.emit('message', actions.right + '#' + time + ';');
-  socket.on('message', function (data) {
-    console.log("Received: " + data);
-  });
 };
 
 robot.forward = function(time) {
   socket.emit('message', actions.forward + '#' + time + ';');
-  socket.on('message', function (data) {
-    console.log("Received: " + data);
-  });
 };
 
 robot.backward = function(time) {
   socket.emit('message', actions.backward + '#' + time + ';');
-  socket.on('message', function (data) {
-    console.log("Received: " + data);
-  });
 };
 
 robot.ledOn = function() {
-  console.log('ledOn');
   socket.emit('message', actions.ledOn + ';');
-  console.log('ledOn sent');
-  socket.on('message', function (data) {
-    console.log("Received: " + data);
-  });
+  console.log(actions.ledOn);
 };
 
 robot.ledOff = function() {
   socket.emit('message', actions.ledOff + ';');
-  socket.on('data', function (data) {
-    console.log("Received: " + data);
-  });
 };
 
 robot.stop = function() {
   socket.emit('message', actions.stop + ';');
-  socket.on('message', function (data) {
-    console.log("Received: " + data);
-  });
 };
 
 robot.get_distance = function() {
