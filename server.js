@@ -18,25 +18,22 @@ function openSocket(socket){
 	console.log('New client: ' + socket.handshake.address);
 
 	socket.on('message', function(data) {
-		/*
-		if(data.startsWith("007"))
-      data ='42#OK';
-    else {
-      data ='OK';
-    }
-    socket.emit('message', data);
-		*/
-
+    console.log('Received from client: ' + data);
     sp.write(data);
-    console.log('Sent: ' + data);
-	});
-
-	sp.on('data', function(data) {
-    console.log('Recevied: ' + data);
-		socket.emit('message', data);
+    console.log('Sent to robot: ' + data);
 	});
 }
 
 function closeSocket() {
-  console.log('Client disconnected: ' + socket.handshake.address
+  console.log('Client disconnected: ' + socket.handshake.address);
 }
+
+sp.on('data', function(data) {
+	console.log('Recevied from robot: ' + data);
+	socketServer.emit('distance', data);
+  console.log('Sent to client: ' + data);
+});
+
+// setInterval(function() {
+//   socketServer.emit('distance', Math.random() * 100);
+// }, 1000 );
