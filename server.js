@@ -17,8 +17,7 @@ socketServer.on('disconnect', closeSocket);
 function openSocket(socket){
 	console.log('New client: ' + socket.handshake.address);
 
-	socket.on('message', function(data) {
-    console.log('Received from client: ' + data);
+	socket.on('action', function(data) {
     sp.write(data);
     console.log('Sent to robot: ' + data);
 	});
@@ -29,11 +28,5 @@ function closeSocket() {
 }
 
 sp.on('data', function(data) {
-	console.log('Recevied from robot: ' + data);
 	socketServer.emit('distance', data);
-  console.log('Sent to client: ' + data);
 });
-
-// setInterval(function() {
-//   socketServer.emit('distance', Math.random() * 100);
-// }, 1000 );
