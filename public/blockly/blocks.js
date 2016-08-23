@@ -96,23 +96,20 @@ Blockly.JavaScript['stop'] = function(block) {
   return code;
 };
 
-Blockly.Blocks['blink'] = {
+Blockly.Blocks['ping'] = {
   init: function() {
     this.appendDummyInput()
-    .appendField("blink");
-    this.appendValueInput("time")
-    .setCheck("Number");
+    .appendField("ping");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(210);
-    this.setTooltip('Turn on the LED for the specified time in ms');
+    this.setTooltip('Trigger a distance update');
   }
 };
 
-Blockly.JavaScript['blink'] = function(block) {
-  var value_time = Blockly.JavaScript.valueToCode(block, 'time', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'robot.blink(' + value_time + ');\n';
+Blockly.JavaScript['ping'] = function(block) {
+  var code = 'robot.ping();\n';
   return code;
 };
 

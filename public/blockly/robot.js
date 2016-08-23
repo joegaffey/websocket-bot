@@ -9,6 +9,7 @@ actions.right = '003#';
 actions.left = '004#';
 actions.ledOn = '005#';
 actions.ledOff = '006#';
+actions.ping = '007#';
 
 var min_distance = 8;
 var sensors = {};
@@ -21,37 +22,43 @@ socket.on('distance', function (data) {
 });
 
 function crash() {
-  socket.emit('message', actions.stop + ';');
+  console.log("Robot crashed!")
+  socket.emit('action', actions.stop + ';');
 }
 
 robot.left = function(time) {
-  socket.emit('message', actions.left + '#' + time + ';');
+  socket.emit('action', actions.left + '#' + time + ';');
 };
 
 robot.right = function(time) {
-  socket.emit('message', actions.right + '#' + time + ';');
+  socket.emit('action', actions.right + '#' + time + ';');
 };
 
 robot.forward = function(time) {
-  socket.emit('message', actions.forward + '#' + time + ';');
+  socket.emit('action', actions.forward + '#' + time + ';');
 };
 
 robot.backward = function(time) {
-  socket.emit('message', actions.backward + '#' + time + ';');
+  socket.emit('action', actions.backward + '#' + time + ';');
 };
 
 robot.ledOn = function() {
-  socket.emit('message', actions.ledOn + ';');
-  console.log(actions.ledOn);
+  socket.emit('action', actions.ledOn + ';');
 };
 
 robot.ledOff = function() {
-  socket.emit('message', actions.ledOff + ';');
+  socket.emit('action', actions.ledOff + ';');
 };
 
 robot.stop = function() {
-  socket.emit('message', actions.stop + ';');
+  socket.emit('action', actions.stop + ';');
 };
+
+robot.ping = function() {
+  socket.emit('action', actions.ping + ';');
+};
+
+
 
 robot.get_distance = function() {
   return sensors.distance;
