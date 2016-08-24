@@ -9,8 +9,10 @@
   <script src="./blocks_compressed.js"></script>
   <script src="./javascript_compressed.js"></script>
   <script src="./msg/js/en.js"></script>
+  <script src="./acorn_interpreter.js"></script>
 
   <script src="blocks.js"></script>
+  <script src="wait_block.js"></script>
   <script src="robot.js"></script>
 </head>
 <body>
@@ -43,7 +45,7 @@
       <block type="logic_boolean"></block>
     </category>
 
-    <category name="Loops">
+    <category name="Flow">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <block type="math_number">
@@ -52,6 +54,7 @@
         </value>
       </block>
       <block type="controls_whileUntil"></block>
+      <block type="wait"></block>
     </category>
 
     <category name="Math">
@@ -85,12 +88,89 @@
     var code = Blockly.JavaScript.workspaceToCode(workspace);
     Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
     try {
-      eval(code);
+      myInterpreter = new Interpreter(code, initApi);
+      nextStep();
     }
     catch (e) {
+      console.log(e);
       alert(e);
     }
   }
+
+  var myInterpreter = null;
+
+  function initApi(interpreter, scope) {
+
+    var wrapper = function(text) {
+      text = text ? text.toString() : '';
+      return interpreter.createPrimitive(alert(text));
+    };
+    interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function(d) {
+      return interpreter.createPrimitive(wait(d));
+    };
+    interpreter.setProperty(scope, 'wait', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_left());
+    };
+    interpreter.setProperty(scope, 'robot_left', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_right());
+    };
+    interpreter.setProperty(scope, 'robot_right', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_forward());
+    };
+    interpreter.setProperty(scope, 'robot_forward', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_backward());
+    };
+    interpreter.setProperty(scope, 'robot_backward', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_stop());
+    };
+    interpreter.setProperty(scope, 'robot_stop', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_ledOn());
+    };
+    interpreter.setProperty(scope, 'robot_ledOn', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_ledOff());
+    };
+    interpreter.setProperty(scope, 'robot_ledOff', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_get_distance());
+    };
+    interpreter.setProperty(scope, 'robot_get_distance', interpreter.createNativeFunction(wrapper));
+
+    var wrapper = function() {
+      return interpreter.createPrimitive(robot_ping());
+    };
+    interpreter.setProperty(scope, 'robot_ping', interpreter.createNativeFunction(wrapper));
+  }
+
+  var nextStepDelay = 0;
+
+  function wait(time) {
+    nextStepDelay = time;
+  }
+
+  function nextStep() {
+    if (myInterpreter.step()) {
+      window.setTimeout(nextStep, nextStepDelay);
+      nextStepDelay = 0;
+    }
+  }
+
   </script>
 
 </body>

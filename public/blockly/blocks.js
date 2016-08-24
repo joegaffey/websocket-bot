@@ -3,8 +3,6 @@ Blockly.Blocks['turn_left'] = {
   init: function() {
     this.appendDummyInput()
     .appendField("turn_left");
-    this.appendValueInput("time")
-    .setCheck("Number");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -14,8 +12,7 @@ Blockly.Blocks['turn_left'] = {
 };
 
 Blockly.JavaScript['turn_left'] = function(block) {
-  var value_time = Blockly.JavaScript.valueToCode(block, 'time', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'robot.left(' + value_time + ');\n';
+  var code = 'robot_left();\n';
   return code;
 };
 
@@ -23,8 +20,6 @@ Blockly.Blocks['turn_right'] = {
   init: function() {
     this.appendDummyInput()
     .appendField("turn_right");
-    this.appendValueInput("time")
-    .setCheck("Number");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -34,8 +29,7 @@ Blockly.Blocks['turn_right'] = {
 };
 
 Blockly.JavaScript['turn_right'] = function(block) {
-  var value_time = Blockly.JavaScript.valueToCode(block, 'time', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'robot.right(' + value_time + ');\n';
+  var code = 'robot_right();\n';
   return code;
 };
 
@@ -43,8 +37,6 @@ Blockly.Blocks['forward'] = {
   init: function() {
     this.appendDummyInput()
     .appendField("forward");
-    this.appendValueInput("time")
-    .setCheck("Number");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -54,8 +46,7 @@ Blockly.Blocks['forward'] = {
 };
 
 Blockly.JavaScript['forward'] = function(block) {
-  var value_time = Blockly.JavaScript.valueToCode(block, 'time', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'robot.forward(' + value_time + ');\n';
+  var code = 'robot_forward();\n';
   return code;
 };
 
@@ -63,8 +54,6 @@ Blockly.Blocks['backward'] = {
   init: function() {
     this.appendDummyInput()
     .appendField("backward");
-    this.appendValueInput("time")
-    .setCheck("Number");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -74,8 +63,7 @@ Blockly.Blocks['backward'] = {
 };
 
 Blockly.JavaScript['backward'] = function(block) {
-  var value_time = Blockly.JavaScript.valueToCode(block, 'time', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'robot.backward(' + value_time + ');\n';
+  var code = 'robot_backward();\n';
   return code;
 };
 
@@ -92,7 +80,7 @@ Blockly.Blocks['stop'] = {
 };
 
 Blockly.JavaScript['stop'] = function(block) {
-  var code = 'robot.stop();\n';
+  var code = 'robot_stop();\n';
   return code;
 };
 
@@ -109,7 +97,7 @@ Blockly.Blocks['ping'] = {
 };
 
 Blockly.JavaScript['ping'] = function(block) {
-  var code = 'robot.ping();\n';
+  var code = 'robot_ping();\n';
   return code;
 };
 
@@ -126,7 +114,7 @@ Blockly.Blocks['get_distance'] = {
 };
 
 Blockly.JavaScript['get_distance'] = function(block) {
-  var code = 'robot.get_distance()';
+  var code = 'robot_get_distance()';
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -143,7 +131,7 @@ Blockly.Blocks['led_on'] = {
 };
 
 Blockly.JavaScript['led_on'] = function(block) {
-  var code = 'robot.ledOn();\n';
+  var code = 'robot_ledOn();\n';
   return code;
 };
 
@@ -160,6 +148,27 @@ Blockly.Blocks['led_off'] = {
 };
 
 Blockly.JavaScript['led_off'] = function(block) {
-  var code = 'robot.ledOff();\n';
+  var code = 'robot_ledOff();\n';
+  return code;
+};
+
+// https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#b99xcz
+Blockly.Blocks['wait'] = {
+  init: function() {
+    this.setColour(120);
+    this.appendDummyInput()
+        .appendField("wait");
+    this.appendValueInput("time")
+        .setCheck("Number");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, "null");
+    this.setNextStatement(true, "null");
+    this.setTooltip('Specify a delay in ms');
+  }
+};
+
+Blockly.JavaScript['wait'] = function(block) {
+  var time = Blockly.JavaScript.valueToCode(block, 'time', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = 'wait(' + time + ');\n';
   return code;
 };

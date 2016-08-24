@@ -18,7 +18,7 @@ function openSocket(socket){
 	console.log('New client: ' + socket.handshake.address);
 
 	socket.on('action', function(data) {
-    sp.write(data);
+    sp.write(data  + '\n');
     console.log('Sent to robot: ' + data);
 	});
 }
