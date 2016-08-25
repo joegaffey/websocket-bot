@@ -1,6 +1,6 @@
 var portString = process.argv[2];
 var SerialPort = require('serialport');
-var sp = new SerialPort(portString, { parser: SerialPort.parsers.readline('\n'), baudRate: 115200 });
+var sp = new SerialPort(portString, { parser: SerialPort.parsers.readline('\n'), baudRate: parseInt(process.argv[3]) });
 
 var express = require('express');
 var app = express();
