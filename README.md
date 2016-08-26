@@ -1,4 +1,4 @@
-# web-bot
+# websocket-bot
 
 Simple node script to control a robot (e.g. [psychotron](https://github.com/joegaffey/psychotron)) via WebSockets with a [Blockly](https://developers.google.com/blockly/) UI.
 
