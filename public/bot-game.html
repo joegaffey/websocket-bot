@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2016 by joegaffey (http://jsbin.com/bobezuf/6/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Bot Control Test</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/3.0.11/pixi.min.js"></script>
+</head>
+<body>
+<div id="controls">
+  <button onclick="javascript:stop()">Stop</button>
+  <button onclick="javascript:left()">Left</button>
+  <button onclick="javascript:right()">Right</button>
+  <button onclick="javascript:forward()">Forward</button>
+  <button onclick="javascript:back()">Back</button>
+</div>
+<script id="jsbin-javascript">
+var stage = new PIXI.Container();
+var renderer = PIXI.autoDetectRenderer(256, 256);
+var botImgUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Robot_icon.svg/48px-Robot_icon.svg.png"
+document.body.appendChild(renderer.view);
+
+PIXI.loader
+  .add(botImgUrl)
+  .load(setup);
+
+var bot, SPEED = 3, SPEED_TO_ROT = 30;
+
+function setup() {
+  bot = new PIXI.Sprite(
+    PIXI.loader.resources[botImgUrl].texture
+  );
+  renderer.backgroundColor = 0xDDDDDD;
+  bot.x = renderer.width / 2;
+  bot.y = renderer.height / 2;
+  bot.speed = 0;
+  bot.anchor.set(0.5, 0.5);
+  bot.rotation = 0;
+  bot.rotRight = false;
+  bot.rotLeft = false;
+
+  stage.addChild(bot);
+  renderer.render(stage);
+  gameLoop();
+}
+
+function gameLoop() {
+  requestAnimationFrame(gameLoop);
+  play();
+  renderer.render(stage);
+}
+
+function move() {
+  bot.x = bot.x - bot.speed * Math.sin(bot.rotation);
+  bot.y = bot.y - bot.speed * Math.cos(bot.rotation);
+
+  if(bot.rotLeft) {
+    bot.rotation -= (SPEED / SPEED_TO_ROT);
+  }
+  if(bot.rotRight) {
+    bot.rotation += (SPEED / SPEED_TO_ROT);
+  }
+}
+
+function stop() {
+  bot.speed = 0;
+  bot.rotLeft = false;
+  bot.rotRight = false;
+}
+
+function forward() {
+  stop();
+  bot.speed = SPEED;
+}
+
+function back() {
+  stop();
+  bot.speed = -SPEED;
+}
+
+function left() {
+  stop();
+  bot.rotLeft = true;
+}
+
+function right() {
+  stop();
+  bot.rotRight = true;
+}
+
+function play() {
+  move();
+  if(bot.x > renderer.width - bot.width / 2 || bot.y > renderer.height - bot.height / 2)
+    stop();
+  if(bot.x < bot.width / 2 || bot.y < bot.height / 2)
+    stop();
+}
+
+function messageListener(event) {
+  switch(event.data) {
+    case 0:
+        stop();
+        break;
+    case 1:
+        forward();
+        break;
+    case 2:
+        back();
+        break;
+    case 3:
+        right();
+        break;
+    case 4:
+        left();
+        break;
+      default:
+        stop();
+  }
+}
+
+addEventListener("message", messageListener);
+
+</script>
+</body>
+</html>
