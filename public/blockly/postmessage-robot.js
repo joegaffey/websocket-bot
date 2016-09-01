@@ -11,40 +11,51 @@ actions.ping = 7;
 var sensors = {};
 sensors.distance = -1;
 
-var domain = 'http://localhost:8585';
+var domain = '*';
 
 robot_left = function() {
-  parent.postMessage(actions.left, domain);
+  sendMessage(actions.left);
 };
 
-robot_right = function(time) {
-  parent.postMessage(actions.right, domain);
+robot_right = function() {
+  sendMessage(actions.right);
 };
 
-robot_forward = function(time) {
-  parent.postMessage(actions.forward, domain);
+robot_forward = function() {
+  sendMessage(actions.forward);
 };
 
-robot_backward = function(time) {
-  parent.postMessage(actions.backward, domain);
+robot_backward = function() {
+  sendMessage(actions.backward);
 };
 
 robot_ledOn = function() {
-  parent.postMessage(actions.ledOn, domain);
+  sendMessage(actions.ledOn);
 };
 
 robot_ledOff = function() {
-  parent.postMessage(actions.ledOff, domain);
+  sendMessage(actions.ledOff);
 };
 
 robot_stop = function() {
-  parent.postMessage(actions.stop, domain);
+  sendMessage(actions.stop);
 };
 
 robot_ping = function() {
-  parent.postMessage(actions.ping, domain);
+  sendMessage(actions.ping);
 };
+
+function sendMessage(msg) {
+  parent.postMessage({'action': msg}, domain);
+}
 
 robot_get_distance = function() {
   return sensors.distance;
 };
+
+function messageListener(event) {
+  if(event.data.distance)
+    sensors.distance = event.data.distance;
+}
+
+addEventListener('message', messageListener);

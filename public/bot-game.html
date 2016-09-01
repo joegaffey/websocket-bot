@@ -1,18 +1,10 @@
 <!DOCTYPE html>
-<!--
-Created using JS Bin
-http://jsbin.com
-
-Copyright (c) 2016 by joegaffey (http://jsbin.com/bobezuf/6/edit)
-
-Released under the MIT license: http://jsbin.mit-license.org
--->
 <meta name="robots" content="noindex">
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Bot Control Test</title>
+  <title>Robot Control Simulation</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/3.0.11/pixi.min.js"></script>
 </head>
 <body>
@@ -22,18 +14,22 @@ Released under the MIT license: http://jsbin.mit-license.org
   <button onclick="javascript:right()">Right</button>
   <button onclick="javascript:forward()">Forward</button>
   <button onclick="javascript:back()">Back</button>
+  <span id="distance">0</span>
 </div>
-<script id="jsbin-javascript">
+<script>
+
+var bot, SPEED = 1, SPEED_TO_ROT = 30, MIN_DISTANCE = 10;
+var domain = '*';
 var stage = new PIXI.Container();
 var renderer = PIXI.autoDetectRenderer(256, 256);
-var botImgUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Robot_icon.svg/48px-Robot_icon.svg.png"
+var botImgUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Robot_icon.svg/48px-Robot_icon.svg.png';
+var distEl = document.getElementById('distance');
+
 document.body.appendChild(renderer.view);
 
 PIXI.loader
   .add(botImgUrl)
   .load(setup);
-
-var bot, SPEED = 3, SPEED_TO_ROT = 30;
 
 function setup() {
   bot = new PIXI.Sprite(
@@ -99,14 +95,36 @@ function right() {
 
 function play() {
   move();
-  if(bot.x > renderer.width - bot.width / 2 || bot.y > renderer.height - bot.height / 2)
+  var distance = getMinDistance();
+  distEl.innerHTML = distance;
+  if (distance < MIN_DISTANCE)
     stop();
-  if(bot.x < bot.width / 2 || bot.y < bot.height / 2)
-    stop();
+  if(window.self !== window.top)
+    sendMessage(distance);
+}
+
+function getMinDistance() {
+  var xDist = -1, yDist = -1;
+
+  if(bot.x > renderer.width / 2)
+    xDist = renderer.width - (bot.x + (bot.width / 2));
+  else
+    xDist = bot.x - (bot.width / 2);
+
+  if(bot.y > renderer.height / 2)
+    yDist = renderer.height - (bot.y + (bot.height / 2));
+  else
+    yDist = bot.y - (bot.height / 2);
+  return Math.round(Math.min(xDist, yDist));
+}
+
+function sendMessage(distance){
+  parent.postMessage({'distance': distance}, domain);
 }
 
 function messageListener(event) {
-  switch(event.data) {
+  console.log(event);
+  switch(event.data.action) {
     case 0:
         stop();
         break;
@@ -127,7 +145,8 @@ function messageListener(event) {
   }
 }
 
-addEventListener("message", messageListener);
+if(window.self !== window.top)
+  addEventListener('message', messageListener);
 
 </script>
 </body>
