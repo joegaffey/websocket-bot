@@ -9,13 +9,14 @@
 </head>
 <body>
 <div id="controls">
+  <button onclick="javascript:reset()">Reset</button>
   <button onclick="javascript:stop()">Stop</button>
   <button onclick="javascript:left()">Left</button>
   <button onclick="javascript:right()">Right</button>
   <button onclick="javascript:forward()">Forward</button>
   <button onclick="javascript:back()">Back</button>
-  <span id="distance">0</span>
 </div>
+<div>Distance to nearest wall is <span id="distance">0</span>px</div>
 <script>
 
 var bot, SPEED = 1, SPEED_TO_ROT = 30, MIN_DISTANCE = 10;
@@ -27,6 +28,51 @@ var distEl = document.getElementById('distance');
 
 document.body.appendChild(renderer.view);
 
+document.addEventListener('keydown', (event) => {
+  if(event.keyCode > 36 && event.keyCode < 41) {
+    arrowDown(event.keyCode);
+  }
+  else wasd(event.key);
+}, false);
+
+function arrowDown(keyCode) {
+  switch(keyCode) {
+    case 38:
+      forward();
+      break;
+    case 40:
+      back();
+      break;
+    case 37:
+      left();
+      break;
+    case 39:
+      right();
+      break;
+    default:
+      stop();
+  }
+}
+
+function wasd(key) {
+  switch(key) {
+    case 'w':
+      forward();
+      break;
+    case 's':
+      back();
+      break;
+    case 'a':
+      left();
+      break;
+    case 'd':
+      right();
+      break;
+    default:
+      stop();
+  }
+}
+
 PIXI.loader
   .add(botImgUrl)
   .load(setup);
@@ -36,13 +82,8 @@ function setup() {
     PIXI.loader.resources[botImgUrl].texture
   );
   renderer.backgroundColor = 0xDDDDDD;
-  bot.x = renderer.width / 2;
-  bot.y = renderer.height / 2;
-  bot.speed = 0;
   bot.anchor.set(0.5, 0.5);
-  bot.rotation = 0;
-  bot.rotRight = false;
-  bot.rotLeft = false;
+  reset();
 
   stage.addChild(bot);
   renderer.render(stage);
@@ -56,8 +97,8 @@ function gameLoop() {
 }
 
 function move() {
-  bot.x = bot.x - bot.speed * Math.sin(bot.rotation);
-  bot.y = bot.y - bot.speed * Math.cos(bot.rotation);
+  bot.x = bot.x + bot.speed * Math.cos(bot.rotation - 1.5708);
+  bot.y = bot.y + bot.speed * Math.sin(bot.rotation - 1.5708);
 
   if(bot.rotLeft) {
     bot.rotation -= (SPEED / SPEED_TO_ROT);
@@ -65,6 +106,13 @@ function move() {
   if(bot.rotRight) {
     bot.rotation += (SPEED / SPEED_TO_ROT);
   }
+}
+
+function reset() {
+  stop ();
+  bot.x = renderer.width / 2;
+  bot.y = renderer.height / 2;
+  bot.rotation = 0;
 }
 
 function stop() {
