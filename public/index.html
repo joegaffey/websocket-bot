@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="blockly/robot.js">
+</head>
+<body>
+<div>Distance: <span id="distance">0</span></div>
+<button onclick="stop()">Stop</button>
+<button onclick="forward()">Forward</button>
+<button onclick="back()">Back</button>
+<button onclick="right()">Right</button>
+<button onclick="left()">Left</button>
+<button onclick="ledOn()">Led On</button>
+<button onclick="ledOff()">Led Off</button>
+<button onclick="ping()">Ping</button>
+<script>
+
+var distanceEl = document.getElementById('distance');
+setInterval(function() {
+  distanceEl.textContent = robot_get_distance();
+}, 500);
+
+document.addEventListener('keydown', (event) => {
+  if(event.keyCode > 36 && event.keyCode < 41) {
+    arrowDown(event.keyCode);
+  }
+  else wasd(event.key);
+}, false);
+
+function arrowDown(keyCode) {
+  switch(keyCode) {
+    case 38:
+      robot_forward();
+      break;
+    case 40:
+      robot_backward();
+      break;
+    case 37:
+      robot_left();
+      break;
+    case 39:
+      robot_right();
+      break;
+    default:
+      robot_stop();
+  }
+}
+
+function wasd(key) {
+  switch(key) {
+    case 'w':
+      robot_forward();
+      break;
+    case 's':
+      robot_back();
+      break;
+    case 'a':
+      robot_left();
+      break;
+    case 'd':
+      robot_right();
+      break;
+    default:
+      robot_stop();
+  }
+}
+
+</script>
+</body>
+</html>
