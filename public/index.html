@@ -5,14 +5,14 @@
 </head>
 <body>
 <div>Distance: <span id="distance">0</span></div>
-<button onclick="stop()">Stop</button>
-<button onclick="forward()">Forward</button>
-<button onclick="back()">Back</button>
-<button onclick="right()">Right</button>
-<button onclick="left()">Left</button>
-<button onclick="ledOn()">Led On</button>
-<button onclick="ledOff()">Led Off</button>
-<button onclick="ping()">Ping</button>
+<button onclick="robot_stop()">Stop</button>
+<button onclick="robot_forward()">Forward</button>
+<button onclick="robot_backward()">Back</button>
+<button onclick="robot_right()">Right</button>
+<button onclick="robot_left()">Left</button>
+<button onclick="robot_ledOn()">Led On</button>
+<button onclick="robot_ledOff()">Led Off</button>
+<button onclick="robot_ping()">Ping</button>
 <script>
 
 var distanceEl = document.getElementById('distance');
@@ -52,7 +52,7 @@ function wasd(key) {
       robot_forward();
       break;
     case 's':
-      robot_back();
+      robot_backward();
       break;
     case 'a':
       robot_left();
