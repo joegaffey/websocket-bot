@@ -1,5 +1,5 @@
 var actions = {};
-actions.stop = 0;
+actions.stop = 10;
 actions.forward = 1;
 actions.backward = 2;
 actions.right = 3;
