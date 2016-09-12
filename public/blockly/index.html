@@ -21,6 +21,8 @@
   <p>
     <button onclick="showCode()">Show code</button>
     <button onclick="runCode()">Run code</button>
+    <button onclick="showXML()">Export</button>
+    <button onclick="importXML()">Import</button>
   </p>
 
   <div id="blocklyDiv" style="height: 600px; width: 800px;"></div>
@@ -129,6 +131,34 @@
       console.log(e);
       alert(e);
     }
+  }
+
+  function loadXML(xml) {
+    if (typeof xml != "string" || xml.length < 5) {
+        alert("No Input");
+        return false;
+        return;
+    }
+    try {
+        var dom = Blockly.Xml.textToDom(xml);
+        Blockly.mainWorkspace.clear();
+        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+        return true;
+    } catch (e) {
+        alert("Invalid xml");
+        return false;
+    }
+  }
+
+  function showXML() {
+    var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+    prompt("Copy the XML below", xmlText);
+  }
+
+  function importXML() {
+    var xml = prompt("Paste your XML here", "XML goes here");
+    loadXML(xml);
   }
 
   var myInterpreter = null;
