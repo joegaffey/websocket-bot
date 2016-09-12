@@ -1,8 +1,7 @@
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#46he25
 Blockly.Blocks['turn_left'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("turn_left");
+    this.appendDummyInput().appendField("turn_left");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -18,8 +17,7 @@ Blockly.JavaScript['turn_left'] = function(block) {
 
 Blockly.Blocks['turn_right'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("turn_right");
+    this.appendDummyInput().appendField("turn_right");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -35,8 +33,7 @@ Blockly.JavaScript['turn_right'] = function(block) {
 
 Blockly.Blocks['forward'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("forward");
+    this.appendDummyInput().appendField("forward");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -52,8 +49,7 @@ Blockly.JavaScript['forward'] = function(block) {
 
 Blockly.Blocks['backward'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("backward");
+    this.appendDummyInput().appendField("backward");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -69,13 +65,12 @@ Blockly.JavaScript['backward'] = function(block) {
 
 Blockly.Blocks['stop'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("stop");
+    this.appendDummyInput().appendField("stop");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(210);
-    this.setTooltip('Stop the bot!');
+    this.setTooltip('Stop the robot!');
   }
 };
 
@@ -86,8 +81,7 @@ Blockly.JavaScript['stop'] = function(block) {
 
 Blockly.Blocks['ping'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("ping");
+    this.appendDummyInput().appendField("ping");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -104,8 +98,7 @@ Blockly.JavaScript['ping'] = function(block) {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#ropyyd
 Blockly.Blocks['get_distance'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("get_distance");
+    this.appendDummyInput().appendField("get_distance");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColour(210);
@@ -120,8 +113,7 @@ Blockly.JavaScript['get_distance'] = function(block) {
 
 Blockly.Blocks['led_on'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("LED on");
+    this.appendDummyInput().appendField("LED on");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -137,8 +129,7 @@ Blockly.JavaScript['led_on'] = function(block) {
 
 Blockly.Blocks['led_off'] = {
   init: function() {
-    this.appendDummyInput()
-    .appendField("LED off");
+    this.appendDummyInput().appendField("LED off");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -152,14 +143,42 @@ Blockly.JavaScript['led_off'] = function(block) {
   return code;
 };
 
+Blockly.Blocks['get_key_char'] = {
+  init: function() {
+    this.appendDummyInput().appendField("get_key_char");
+    this.setInputsInline(true);
+    this.setOutput(true, "String");
+    this.setColour(210);
+    this.setTooltip('Get the last key pressed');
+  }
+};
+
+Blockly.JavaScript['get_key_char'] = function(block) {
+  var code = 'get_key_char()';
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.Blocks['get_key_code'] = {
+  init: function() {
+    this.appendDummyInput().appendField("get_key_code");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(210);
+    this.setTooltip('Get the last key pressed');
+  }
+};
+
+Blockly.JavaScript['get_key_code'] = function(block) {
+  var code = 'get_key_code()';
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#b99xcz
 Blockly.Blocks['wait'] = {
   init: function() {
     this.setColour(120);
-    this.appendDummyInput()
-        .appendField("wait");
-    this.appendValueInput("time")
-        .setCheck("Number");
+    this.appendDummyInput().appendField("wait");
+    this.appendValueInput("time").setCheck("Number");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "null");
     this.setNextStatement(true, "null");
