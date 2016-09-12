@@ -21,8 +21,9 @@
   <p>
     <button onclick="showCode()">Show code</button>
     <button onclick="runCode()">Run code</button>
-    <button onclick="showXML()">Export</button>
-    <button onclick="importXML()">Import</button>
+    <button onclick="downloadXML()">Export</button>
+    <input id="fileInput" type="file" style="display:none;" onchange="fileSelected(this)"/>
+    <input type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
   </p>
 
   <div id="blocklyDiv" style="height: 600px; width: 800px;"></div>
@@ -150,16 +151,36 @@
     }
   }
 
-  function showXML() {
+  function downloadXML() {
     var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-    prompt("Copy the XML below", xmlText);
+    var a = document.createElement('a');
+    var file = new Blob([xmlText], {type:  'text/plain'});
+    a.href = URL.createObjectURL(file);
+    a.download = new Date().getTime() + '.xml';
+    a.click();
+    window.URL.revokeObjectURL(a.href);
   }
 
-  function importXML() {
-    var xml = prompt("Paste your XML here", "XML goes here");
-    loadXML(xml);
+  function fileSelected(input) {
+    var reader = new FileReader();
+    console.log(input.files[0]);
+    reader.readAsText(input.files[0]);
+    reader.onloadend = function() {
+      loadXML(reader.result);
+    };
   }
+
+  // function showXML() {
+  //   var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  //   var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+  //   prompt("Copy the XML below", xmlText);
+  // }
+  //
+  // function importXML() {
+  //   var xml = prompt("Paste your XML here", "XML goes here");
+  //   loadXML(xml);
+  // }
 
   var myInterpreter = null;
 
