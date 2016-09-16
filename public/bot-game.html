@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>Robot Control Simulation</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/3.0.11/pixi.min.js"></script>
+  <script src="./pixi.min.js"></script>
 </head>
 <body>
 <div id="controls">
@@ -16,14 +16,30 @@
   <button onclick="javascript:forward()">Forward</button>
   <button onclick="javascript:back()">Back</button>
 </div>
-<div>Distance to nearest wall is <span id="distance">0</span>px</div>
+<div>Distance to nearest obstacle is <span id="distance">0</span>px</div>
 <script>
 
-var bot, SPEED = 1, SPEED_TO_ROT = 30, MIN_DISTANCE = 10;
+var SPEED = 1,
+    SPEED_TO_ROT = 30,
+    MIN_DISTANCE = 0,
+    OBSTACLE_PADDING = 54;
+
+var gameOver = false;
+
+var bot = {};
+var home = {};
+var obstacles = [];
+
 var domain = '*';
 var stage = new PIXI.Container();
-var renderer = PIXI.autoDetectRenderer(256, 256);
-var botImgUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Robot_icon.svg/48px-Robot_icon.svg.png';
+var renderer = PIXI.autoDetectRenderer(512, 512);
+
+var botImgUrl = './media/robot.png';
+var obsImgUrl = './media/cone.png';
+var homeImgUrl = './media/home.png';
+
+var gameOverText = new PIXI.Text("GAME OVER!", {font:"50px Arial", fill:"red"});
+
 var distEl = document.getElementById('distance');
 
 document.body.appendChild(renderer.view);
@@ -75,17 +91,50 @@ function wasd(key) {
 
 PIXI.loader
   .add(botImgUrl)
+  .add(obsImgUrl)
+  .add(homeImgUrl)
   .load(setup);
+
+function setupObstacles() {
+    var tex = PIXI.loader.resources[obsImgUrl].texture;
+    for(var i = 0; i < 6; i++)
+      obstacles.push(new PIXI.Sprite(tex));
+
+    var xPositions = [100, renderer.width - 100, 100, renderer.width - 100, renderer.width / 2];
+    var yPositions = [renderer.height - 100, 100, 100, renderer.height - 100, renderer.height / 2];
+
+    obstacles.forEach(function (obstacle, i) {
+      obstacle.position.x = xPositions[i];
+      obstacle.position.y = yPositions[i];
+      obstacle.anchor.set(0.5, 0.5);
+      stage.addChild(obstacle);
+    });
+}
 
 function setup() {
   bot = new PIXI.Sprite(
     PIXI.loader.resources[botImgUrl].texture
   );
+
+  home = new PIXI.Sprite(
+    PIXI.loader.resources[homeImgUrl].texture
+  );
+  home.x = renderer.width / 2;
+  home.y = 50;
+  home.anchor.set(0.5, 0.5);
+
+  gameOverText.x = renderer.width / 2;
+  gameOverText.y = renderer.height / 2;
+  gameOverText.anchor.set(0.5, 0.5);
+
+  setupObstacles();
   renderer.backgroundColor = 0xDDDDDD;
   bot.anchor.set(0.5, 0.5);
   reset();
 
+  stage.addChild(home);
   stage.addChild(bot);
+
   renderer.render(stage);
   gameLoop();
 }
@@ -110,9 +159,11 @@ function move() {
 
 function reset() {
   stop ();
+  stage.removeChild(gameOverText);
   bot.x = renderer.width / 2;
-  bot.y = renderer.height / 2;
+  bot.y = renderer.height - 100;
   bot.rotation = 0;
+  gameOver = false;
 }
 
 function stop() {
@@ -142,16 +193,30 @@ function right() {
 }
 
 function play() {
+  if(gameOver)
+    return;
   move();
-  var distance = getMinDistance();
-  distEl.innerHTML = distance;
-  if (distance < MIN_DISTANCE)
+  if(homeReached()) {
     stop();
+    stage.addChild(gameOverText);
+    gameOver = true;
+    alert("My micromechanism thanks you, my computer tapes thank you, and I thank you.");
+    return;
+  }
+  var distance = Math.min(getMinWallDistance(), getMinObstacleDistance());
+  distEl.innerHTML = distance;
+  if (distance <= MIN_DISTANCE) {
+    stop();
+    stage.addChild(gameOverText);
+    gameOver = true;
+    alert("Danger Will Robinson!!!");
+    return;
+  }
   if(window.self !== window.top)
     sendMessage(distance);
 }
 
-function getMinDistance() {
+function getMinWallDistance() {
   var xDist = -1, yDist = -1;
 
   if(bot.x > renderer.width / 2)
@@ -164,6 +229,30 @@ function getMinDistance() {
   else
     yDist = bot.y - (bot.height / 2);
   return Math.round(Math.min(xDist, yDist));
+}
+
+function homeReached() {
+  var a = home.x - bot.x;
+  var b = home.y - bot.y;
+  // Pythagoras FTW!!!
+  var c = Math.sqrt( a*a + b*b );
+  if(c < 40)
+    return true;
+  else
+    return false;
+}
+
+function getMinObstacleDistance() {
+  var dist = 9999;
+  obstacles.forEach(function (o, i) {
+    var a = o.x - bot.x;
+    var b = o.y - bot.y;
+    // Pythagoras FTW again!!!
+    var c = Math.sqrt( a*a + b*b );
+    if(c < dist)
+      dist = c;
+  });
+  return Math.round(dist) - OBSTACLE_PADDING;
 }
 
 function sendMessage(distance){
