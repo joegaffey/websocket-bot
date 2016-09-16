@@ -11,8 +11,8 @@
   <script src="blocks.js"></script>
 
   <!-- Pick a robot -->
-  <script src="robot.js"></script>
-  <!-- <script src="postmessage-robot.js"></script> -->
+  <!-- <script src="robot.js"></script> -->
+  <script src="postmessage-robot.js"></script>
   <!-- <script src="test-robot.js"></script> -->
 
 </head>
@@ -20,7 +20,8 @@
 
   <p>
     <button onclick="showCode()">Show code</button>
-    <button onclick="runCode()">Run code</button>
+    <button onclick="runCode()">Execute</button>
+    <button onclick="halt()">Halt</button>
     <button onclick="downloadXML()">Export</button>
     <input id="fileInput" type="file" style="display:none;" onchange="fileSelected(this)"/>
     <input type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
@@ -125,6 +126,7 @@
     var code = Blockly.JavaScript.workspaceToCode(workspace);
     Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
     try {
+      halted = false;
       myInterpreter = new Interpreter(code, initApi);
       nextStep();
     }
@@ -132,6 +134,10 @@
       console.log(e);
       alert(e);
     }
+  }
+
+  function halt() {
+    halted = true;
   }
 
   function loadXML(xml) {
@@ -170,17 +176,6 @@
       loadXML(reader.result);
     };
   }
-
-  // function showXML() {
-  //   var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  //   var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-  //   prompt("Copy the XML below", xmlText);
-  // }
-  //
-  // function importXML() {
-  //   var xml = prompt("Paste your XML here", "XML goes here");
-  //   loadXML(xml);
-  // }
 
   var myInterpreter = null;
 
@@ -260,7 +255,7 @@
   }
 
   function nextStep() {
-    if (myInterpreter.step()) {
+    if (!halted && myInterpreter.step()) {
       window.setTimeout(nextStep, nextStepDelay);
       nextStepDelay = 0;
     }
