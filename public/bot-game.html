@@ -246,7 +246,7 @@ function play() {
     return;
   }
   distance = Math.min(getMinWallDistance(), getMinObstacleDistance());
-  distanceText.setText(distanceMessage + distance);
+  distanceText.text = distanceMessage + distance;
 
   if (distance <= MIN_DISTANCE) {
     stop();

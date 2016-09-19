@@ -113,13 +113,7 @@
   };
 
   function processHash() {
-    var params  = window.location.hash.substring(1).split('&');
-    params.forEach(function(param) {
-      keyVal = param.split('=');
-      if(keyVal[0] == 'mode') {
-        switchMode(keyVal[1]);
-      }
-    });
+    switchMode(window.location.hash.substring(1));
   }
 
   function switchMode(mode) {
@@ -129,6 +123,7 @@
       loadJS("test-robot.js");
     else if(mode == 'robot')
       loadJS("robot.js");
+    console.log("Mode: " + mode)
   }
 
   function get_key_char(time) {
