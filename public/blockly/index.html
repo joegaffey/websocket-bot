@@ -9,12 +9,6 @@
   <script src="./msg/js/en.js"></script>
   <script src="./acorn_interpreter.js"></script>
   <script src="blocks.js"></script>
-
-  <!-- Pick a robot -->
-  <!-- <script src="robot.js"></script> -->
-  <script src="postmessage-robot.js"></script>
-  <!-- <script src="test-robot.js"></script> -->
-
 </head>
 <body>
 
@@ -102,8 +96,50 @@
     keyEvent = event
   }, false);
 
+  if(window.self !== window.top)
+    addEventListener('message', messageListener);
+
+  function messageListener() {
+    if(event.data.mode) {
+      console.log(event.data);
+      switchMode(event.data.mode);
+    }
+  }
+
+  processHash();
+
+  window.onhashchange = function() {
+    processHash();
+  };
+
+  function processHash() {
+    var params  = window.location.hash.substring(1).split('&');
+    params.forEach(function(param) {
+      keyVal = param.split('=');
+      if(keyVal[0] == 'mode') {
+        switchMode(keyVal[1]);
+      }
+    });
+  }
+
+  function switchMode(mode) {
+    if(mode == 'sim')
+      loadJS("postmessage-robot.js");
+    else if(mode == 'test')
+      loadJS("test-robot.js");
+    else if(mode == 'robot')
+      loadJS("robot.js");
+  }
+
   function get_key_char(time) {
     return keyEvent.key;
+  }
+
+  function loadJS(file) {
+    var script = document.createElement("script");
+    script.type = "application/javascript";
+    script.src = file;
+    document.body.appendChild(script);
   }
 
   function get_key_code(time) {

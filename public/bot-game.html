@@ -2,24 +2,33 @@
 <meta name="robots" content="noindex">
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Robot Control Simulation</title>
-  <script src="./pixi.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Robot Control Simulation</title>
+<script src="./pixi.min.js"></script>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  height: 100%;
+}
+#controls {
+  padding-bottom: 20px;
+}
+</style>
 </head>
 <body>
 <div id="controls">
-  <button onclick="javascript:reset()">Reset</button>
-  <button onclick="javascript:stop()">Stop</button>
-  <button onclick="javascript:left()">Left</button>
-  <button onclick="javascript:right()">Right</button>
-  <button onclick="javascript:forward()">Forward</button>
-  <button onclick="javascript:back()">Back</button>
+<button onclick="javascript:reset()">Reset</button>
+<button onclick="javascript:stop()">Stop</button>
+<button onclick="javascript:left()">Left</button>
+<button onclick="javascript:right()">Right</button>
+<button onclick="javascript:forward()">Forward</button>
+<button onclick="javascript:back()">Back</button>
 </div>
-<div>Distance to nearest obstacle is <span id="distance">0</span>px</div>
 <script>
 
-var SPEED = 1,
+var SPEED = 0.4,
     SPEED_TO_ROT = 30,
     MIN_DISTANCE = 0,
     OBSTACLE_PADDING = 54;
@@ -29,6 +38,8 @@ var gameOver = false;
 var bot = {};
 var home = {};
 var obstacles = [];
+var distance;
+var distanceMessage = "Closest obstacle: "
 
 var domain = '*';
 var stage = new PIXI.Container();
@@ -38,18 +49,41 @@ var botImgUrl = './media/robot.png';
 var obsImgUrl = './media/cone.png';
 var homeImgUrl = './media/home.png';
 
-var gameOverText = new PIXI.Text("GAME OVER!", {font:"50px Arial", fill:"red"});
+var winStyle = {
+    font: 'bold 64px Arial',
+    fill: 'green',
+    align: 'center',
+    stroke: 'white',
+    strokeThickness: 10,
+    lineJoin: 'round'
+}
 
-var distEl = document.getElementById('distance');
+var loseStyle = {
+    font: 'bold 64px Arial',
+    fill: 'red',
+    align: 'center',
+    stroke: 'white',
+    strokeThickness: 10,
+    lineJoin: 'round'
+}
+
+var distanceStyle = {
+    font: '16px Arial',
+    fill: 'black'
+}
+
+var winText = new PIXI.Text("You Won!\nGAME OVER!", winStyle);
+var loseText = new PIXI.Text("You Lost!\nGAME OVER!", loseStyle);
+var distanceText = new PIXI.Text(distanceMessage + distance, distanceStyle);
 
 document.body.appendChild(renderer.view);
 
-document.addEventListener('keydown', (event) => {
-  if(event.keyCode > 36 && event.keyCode < 41) {
-    arrowDown(event.keyCode);
-  }
-  else wasd(event.key);
-}, false);
+// document.addEventListener('keydown', (event) => {
+//   if(event.keyCode > 36 && event.keyCode < 41) {
+//     arrowDown(event.keyCode);
+//   }
+//   else wasd(event.key);
+// }, false);
 
 function arrowDown(keyCode) {
   switch(keyCode) {
@@ -123,15 +157,23 @@ function setup() {
   home.y = 50;
   home.anchor.set(0.5, 0.5);
 
-  gameOverText.x = renderer.width / 2;
-  gameOverText.y = renderer.height / 2;
-  gameOverText.anchor.set(0.5, 0.5);
+  winText.x = renderer.width / 2;
+  winText.y = renderer.height / 2;
+  winText.anchor.set(0.5, 0.5);
+
+  loseText.x = renderer.width / 2;
+  loseText.y = renderer.height / 2;
+  loseText.anchor.set(0.5, 0.5);
+
+  distanceText.x = 5;
+  distanceText.y = 5;
 
   setupObstacles();
   renderer.backgroundColor = 0xDDDDDD;
   bot.anchor.set(0.5, 0.5);
   reset();
 
+  stage.addChild(distanceText);
   stage.addChild(home);
   stage.addChild(bot);
 
@@ -159,7 +201,8 @@ function move() {
 
 function reset() {
   stop ();
-  stage.removeChild(gameOverText);
+  stage.removeChild(winText);
+  stage.removeChild(loseText);
   bot.x = renderer.width / 2;
   bot.y = renderer.height - 100;
   bot.rotation = 0;
@@ -198,18 +241,17 @@ function play() {
   move();
   if(homeReached()) {
     stop();
-    stage.addChild(gameOverText);
+    stage.addChild(winText);
     gameOver = true;
-    alert("My micromechanism thanks you, my computer tapes thank you, and I thank you.");
     return;
   }
-  var distance = Math.min(getMinWallDistance(), getMinObstacleDistance());
-  distEl.innerHTML = distance;
+  distance = Math.min(getMinWallDistance(), getMinObstacleDistance());
+  distanceText.setText(distanceMessage + distance);
+
   if (distance <= MIN_DISTANCE) {
     stop();
-    stage.addChild(gameOverText);
+    stage.addChild(loseText);
     gameOver = true;
-    alert("Danger Will Robinson!!!");
     return;
   }
   if(window.self !== window.top)
