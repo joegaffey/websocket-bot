@@ -6,7 +6,7 @@ Blockly.Blocks['turn_left'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(210);
-    this.setTooltip('Turn the robot left for specified time in ms');
+    this.setTooltip('Turn the robot left');
   }
 };
 
@@ -22,7 +22,7 @@ Blockly.Blocks['turn_right'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(210);
-    this.setTooltip('Turn the robot right for specified time in ms');
+    this.setTooltip('Turn the robot right');
   }
 };
 
@@ -38,7 +38,7 @@ Blockly.Blocks['forward'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(210);
-    this.setTooltip('Move the robot forwards for specified time in ms');
+    this.setTooltip('Move the robot forwards');
   }
 };
 
@@ -54,7 +54,7 @@ Blockly.Blocks['backward'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(210);
-    this.setTooltip('Move the robot backwards for specified time in ms');
+    this.setTooltip('Move the robot backwards');
   }
 };
 

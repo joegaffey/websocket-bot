@@ -7,11 +7,9 @@ actions.left = 4;
 actions.ledOn = 5;
 actions.ledOff = 6;
 actions.ping = 7;
+actions.reset = 8;
 
-var sensors = {};
-sensors.distance = -1;
-
-var domain = '*';
+var distance = 9999999;
 
 robot_left = function() {
   sendMessage(actions.left);
@@ -45,17 +43,10 @@ robot_ping = function() {
   sendMessage(actions.ping);
 };
 
-function sendMessage(msg) {
-  parent.postMessage({'action': msg}, domain);
-}
-
-robot_get_distance = function() {
-  return sensors.distance;
+robot_reset = function() {
+  sendMessage(actions.reset);
 };
 
-function messageListener(event) {
-  if(event.data.distance)
-    sensors.distance = event.data.distance;
-}
-
-addEventListener('message', messageListener);
+robot_get_distance = function() {
+  return distance;
+};

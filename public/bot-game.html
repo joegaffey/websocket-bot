@@ -5,7 +5,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <title>Robot Control Simulation</title>
-<script src="./pixi.min.js"></script>
+<script src="./lib/pixi.min.js"></script>
+<script src="./keyboard.js"></script>
 <style>
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -76,52 +77,10 @@ var winText = new PIXI.Text("You Won!\nGAME OVER!", winStyle);
 var loseText = new PIXI.Text("You Lost!\nGAME OVER!", loseStyle);
 var distanceText = new PIXI.Text(distanceMessage + distance, distanceStyle);
 
+if(window.location.hash.substring(1) === "keyboard")
+  document.addEventListener('keydown', keyDownHandler, false);
+
 document.body.appendChild(renderer.view);
-
-// document.addEventListener('keydown', (event) => {
-//   if(event.keyCode > 36 && event.keyCode < 41) {
-//     arrowDown(event.keyCode);
-//   }
-//   else wasd(event.key);
-// }, false);
-
-function arrowDown(keyCode) {
-  switch(keyCode) {
-    case 38:
-      forward();
-      break;
-    case 40:
-      back();
-      break;
-    case 37:
-      left();
-      break;
-    case 39:
-      right();
-      break;
-    default:
-      stop();
-  }
-}
-
-function wasd(key) {
-  switch(key) {
-    case 'w':
-      forward();
-      break;
-    case 's':
-      back();
-      break;
-    case 'a':
-      left();
-      break;
-    case 'd':
-      right();
-      break;
-    default:
-      stop();
-  }
-}
 
 PIXI.loader
   .add(botImgUrl)
@@ -171,7 +130,7 @@ function setup() {
   setupObstacles();
   renderer.backgroundColor = 0xDDDDDD;
   bot.anchor.set(0.5, 0.5);
-  reset();
+  robot_reset();
 
   stage.addChild(distanceText);
   stage.addChild(home);
@@ -199,8 +158,8 @@ function move() {
   }
 }
 
-function reset() {
-  stop ();
+function robot_reset() {
+  robot_stop();
   stage.removeChild(winText);
   stage.removeChild(loseText);
   bot.x = renderer.width / 2;
@@ -209,29 +168,29 @@ function reset() {
   gameOver = false;
 }
 
-function stop() {
+function robot_stop() {
   bot.speed = 0;
   bot.rotLeft = false;
   bot.rotRight = false;
 }
 
-function forward() {
-  stop();
+function robot_forward() {
+  robot_stop();
   bot.speed = SPEED;
 }
 
-function back() {
-  stop();
+function robot_back() {
+  robot_stop();
   bot.speed = -SPEED;
 }
 
-function left() {
-  stop();
+function robot_left() {
+  robot_stop();
   bot.rotLeft = true;
 }
 
-function right() {
-  stop();
+function robot_right() {
+  robot_stop();
   bot.rotRight = true;
 }
 
@@ -240,7 +199,7 @@ function play() {
     return;
   move();
   if(homeReached()) {
-    stop();
+    robot_stop();
     stage.addChild(winText);
     gameOver = true;
     return;
@@ -249,7 +208,7 @@ function play() {
   distanceText.text = distanceMessage + distance;
 
   if (distance <= MIN_DISTANCE) {
-    stop();
+    robot_stop();
     stage.addChild(loseText);
     gameOver = true;
     return;
@@ -302,24 +261,28 @@ function sendMessage(distance){
 }
 
 function messageListener(event) {
+  console.log(event);
   switch(event.data.action) {
     case 10:
-        stop();
+        robot_stop();
         break;
     case 1:
-        forward();
+        robot_forward();
         break;
     case 2:
-        back();
+        robot_back();
         break;
     case 3:
-        right();
+        robot_right();
         break;
     case 4:
-        left();
+        robot_left();
         break;
-      default:
-        stop();
+    case 8:
+        robot_reset();
+        break;
+    default:
+      break;
   }
 }
 
