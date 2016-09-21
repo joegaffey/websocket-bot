@@ -3,69 +3,29 @@
 <head>
   <title>Robot Controller</title>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-  <script src="./blockly/robot.js"></script>
+  <script src="./robot.js"></script>
+  <script src="./websocket-robot.js"></script>
+  <script src="./keyboard.js"></script>
 </head>
 <body>
-<div>Distance: <span id="distance">0</span></div>
-<button onclick="robot_stop()">Stop</button>
-<button onclick="robot_forward()">Forward</button>
-<button onclick="robot_backward()">Back</button>
-<button onclick="robot_right()">Right</button>
-<button onclick="robot_left()">Left</button>
-<button onclick="robot_ledOn()">Led On</button>
-<button onclick="robot_ledOff()">Led Off</button>
-<button onclick="robot_ping()">Ping</button>
+  <div>Distance: <span id="distance">0</span></div>
+  <button onclick="robot_stop()">Stop</button>
+  <button onclick="robot_forward()">Forward</button>
+  <button onclick="robot_backward()">Back</button>
+  <button onclick="robot_right()">Right</button>
+  <button onclick="robot_left()">Left</button>
+  <button onclick="robot_ledOn()">Led On</button>
+  <button onclick="robot_ledOff()">Led Off</button>
+  <button onclick="robot_ping()">Ping</button>
+  <button onclick="robot_reset()">Reset</button>
 <script>
+
+document.addEventListener('keydown', keyDownHandler, false);
 
 var distanceEl = document.getElementById('distance');
 setInterval(function() {
   distanceEl.textContent = robot_get_distance();
 }, 500);
-
-document.addEventListener('keydown', (event) => {
-  if(event.keyCode > 36 && event.keyCode < 41) {
-    arrowDown(event.keyCode);
-  }
-  else wasd(event.key);
-}, false);
-
-function arrowDown(keyCode) {
-  switch(keyCode) {
-    case 38:
-      robot_forward();
-      break;
-    case 40:
-      robot_backward();
-      break;
-    case 37:
-      robot_left();
-      break;
-    case 39:
-      robot_right();
-      break;
-    default:
-      robot_stop();
-  }
-}
-
-function wasd(key) {
-  switch(key) {
-    case 'w':
-      robot_forward();
-      break;
-    case 's':
-      robot_backward();
-      break;
-    case 'a':
-      robot_left();
-      break;
-    case 'd':
-      robot_right();
-      break;
-    default:
-      robot_stop();
-  }
-}
 
 </script>
 </body>

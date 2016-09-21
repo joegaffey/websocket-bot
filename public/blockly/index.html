@@ -2,13 +2,14 @@
 <html>
 <head>
   <title>Blockly Robot Controller</title>
-  <script src="./socket.io-1.2.0.js"></script>
   <script src="./blockly_compressed.js"></script>
   <script src="./blocks_compressed.js"></script>
   <script src="./javascript_compressed.js"></script>
   <script src="./msg/js/en.js"></script>
   <script src="./acorn_interpreter.js"></script>
-  <script src="./blocks.js"></script>
+  <script src="./robot_blocks.js"></script>
+  <script src="../lib/socket.io-1.2.0.js"></script>
+  <script src="../robot.js"></script>
 </head>
 <body>
 
@@ -117,11 +118,11 @@
 
   function switchMode(mode) {
     if(mode == 'sim')
-      loadJS("postmessage-robot.js");
+      loadJS("../postmessage-robot.js");
     else if(mode == 'test')
-      loadJS("test-robot.js");
+      loadJS("../test-robot.js");
     else if(mode == 'robot')
-      loadJS("robot.js");
+      loadJS("../websocket-robot.js");
     console.log("Mode: " + mode);
   }
 
