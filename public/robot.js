@@ -9,7 +9,7 @@ actions.ledOff = 6;
 actions.ping = 7;
 actions.reset = 8;
 
-var distance = 9999999;
+var distance = 9999;
 
 robot_left = function() {
   sendMessage(actions.left);

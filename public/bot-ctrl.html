@@ -2,30 +2,93 @@
 <html>
 <head>
   <title>Robot Controller</title>
-  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="./lib/socket.io-1.2.0.js"></script>
   <script src="./robot.js"></script>
-  <script src="./websocket-robot.js"></script>
+  <script src="./test-robot.js"></script>
   <script src="./keyboard.js"></script>
+  <style>
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  #controls {
+    padding: 10px;
+  }
+  #distance {
+    font-size: 14pt;
+    padding: 10px;
+  }
+  #distanceVal {
+    color: green;
+    float: left;
+    font-size: 72pt;
+    width: 100px;
+    padding-left: 20px;
+  }
+  #distanceEq {
+    padding-top: 10px;
+    float: left;
+    width: 100px;
+    height: 100px;
+  }
+  #distanceEq > table {
+    height: 100%;
+    width: 100%;
+  }
+  td {
+    margin: 10px;
+    background-color: green;
+  }
+  </style>
 </head>
 <body>
-  <div>Distance: <span id="distance">0</span></div>
-  <button onclick="robot_stop()">Stop</button>
-  <button onclick="robot_forward()">Forward</button>
-  <button onclick="robot_backward()">Back</button>
-  <button onclick="robot_right()">Right</button>
-  <button onclick="robot_left()">Left</button>
-  <button onclick="robot_ledOn()">Led On</button>
-  <button onclick="robot_ledOff()">Led Off</button>
-  <button onclick="robot_ping()">Ping</button>
-  <button onclick="robot_reset()">Reset</button>
+  <div id="controls">
+    <button onclick="robot_stop()">Stop</button>
+    <button onclick="robot_forward()">Forward</button>
+    <button onclick="robot_backward()">Back</button>
+    <button onclick="robot_right()">Right</button>
+    <button onclick="robot_left()">Left</button>
+    <button onclick="robot_ledOn()">Led On</button>
+    <button onclick="robot_ledOff()">Led Off</button>
+    <button onclick="robot_ping()">Ping</button>
+    <button onclick="robot_reset()">Reset</button>
+  </div>
+
+  <div id="distance">
+    <div>Distance (CM)</div>
+    <!-- <div id="distanceEq">
+      <table>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+      </table>
+    </div> -->
+    <div id="distanceVal"></div>
+  </div>
+
 <script>
+var t1 = 20;
+var t2 = 30;
 
 document.addEventListener('keydown', keyDownHandler, false);
 
-var distanceEl = document.getElementById('distance');
+var distanceValEl = document.getElementById('distanceVal');
+
 setInterval(function() {
-  distanceEl.textContent = robot_get_distance();
-}, 500);
+  var distance = robot_get_distance();
+  distanceValEl.textContent = distance;
+
+  if(distance < t1) {
+    distanceValEl.style.color = 'red';
+  }
+  else if(distance < t2) {
+    distanceValEl.style.color = 'orange';
+  }
+  else {
+    distanceValEl.style.color = 'green';
+  }
+}, 300);
 
 </script>
 </body>
