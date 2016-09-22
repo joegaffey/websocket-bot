@@ -14,7 +14,15 @@ body {
   height: 100%;
 }
 #controls {
-  padding-bottom: 20px;
+  padding-bottom: 0px;
+  display: none;
+}
+#stage {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 </style>
 </head>
@@ -27,6 +35,7 @@ body {
 <button onclick="javascript:robot_forward()">Forward</button>
 <button onclick="javascript:robot_back()">Back</button>
 </div>
+<canvas id="stage"></canvas>
 <script>
 
 var SPEED = 0.4,
@@ -44,7 +53,21 @@ var distanceMessage = "Closest obstacle: "
 
 var domain = '*';
 var stage = new PIXI.Container();
-var renderer = PIXI.autoDetectRenderer(512, 512);
+//var renderer = PIXI.autoDetectRenderer(512, 512);
+
+// viewport dimensions
+var baseWidth = Math.floor(window.innerWidth);
+var baseHeight = Math.floor(window.innerHeight);
+// scene dimensions
+var projectedWidth = 600;
+var projectedHeight = 600;
+// viewport aspect ratio
+var aspectRatio = baseWidth / baseHeight;
+// renderer acctual dimensions
+var rendererWidth = projectedWidth * aspectRatio;
+var rendererHeight = projectedHeight;
+renderer = PIXI.autoDetectRenderer(rendererWidth, rendererHeight, { view: document.getElementById("stage") });
+
 
 var botImgUrl = './media/robot.png';
 var obsImgUrl = './media/cone.png';

@@ -1,6 +1,28 @@
-<iframe id="blocklyFrame" src="./blockly/index.html#sim" height="680" width="810" frameBorder="0" scrolling="no" style="float:left"></iframe>
-<iframe id="controlFrame" src="./bot-ctrl.html#sim" height="200" width="520" frameBorder="0" scrolling="no" align="top" style="float:left"></iframe>
-<iframe id="gameFrame" src="./bot-game.html" height="680" width="520" frameBorder="0" scrolling="no"  align="top" style="float:left"></iframe>
+<html>
+<head>
+  <style>
+  #blocklyDiv {
+    height: 800px;
+    width: 400px;
+    float:left;
+  }
+  #controlDiv {
+    width:auto;
+    height:200px;
+    overflow:hidden;
+  }
+  #gameDiv {
+    width:auto;
+    max-width: 600;
+    height:450px;
+    overflow:hidden;
+  }
+  </style>
+</head>
+<body>
+<div id="blocklyDiv"><iframe id="blocklyFrame" src="./blockly/index.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
+<div id="controlDiv"><iframe id="controlFrame" src="./bot-ctrl.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
+<div id="gameDiv"><iframe id="gameFrame" src="./bot-game.html" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
 <script>
 
 var blocklyFrame = document.getElementById("blocklyFrame").contentWindow;
@@ -19,3 +41,4 @@ function messageListener(event) {
 
 addEventListener('message', messageListener);
 </script>
+<body>
