@@ -20,12 +20,12 @@ body {
 </head>
 <body>
 <div id="controls">
-<button onclick="javascript:reset()">Reset</button>
-<button onclick="javascript:stop()">Stop</button>
-<button onclick="javascript:left()">Left</button>
-<button onclick="javascript:right()">Right</button>
-<button onclick="javascript:forward()">Forward</button>
-<button onclick="javascript:back()">Back</button>
+<button onclick="javascript:robot_reset()">Reset</button>
+<button onclick="javascript:robot_stop()">Stop</button>
+<button onclick="javascript:robot_left()">Left</button>
+<button onclick="javascript:robot_right()">Right</button>
+<button onclick="javascript:robot_forward()">Forward</button>
+<button onclick="javascript:robot_back()">Back</button>
 </div>
 <script>
 
@@ -261,7 +261,6 @@ function sendMessage(distance){
 }
 
 function messageListener(event) {
-  console.log(event);
   switch(event.data.action) {
     case 10:
         robot_stop();
