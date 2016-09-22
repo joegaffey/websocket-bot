@@ -126,15 +126,15 @@
     console.log("Mode: " + mode);
   }
 
-  function get_key_char(time) {
-    return keyEvent.key;
-  }
-
   function loadJS(file) {
     var script = document.createElement("script");
     script.type = "application/javascript";
     script.src = file;
     document.body.appendChild(script);
+  }
+
+  function get_key_char(time) {
+    return keyEvent.key;
   }
 
   function get_key_code(time) {

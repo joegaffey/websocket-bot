@@ -1,15 +1,19 @@
-<iframe id="blocklyFrame" src="./blockly/index.html#sim" height="680" width="810" frameBorder="0" scrolling="no"></iframe>
-<iframe id="gameFrame" src="./bot-game.html" height="680" width="520" frameBorder="0" scrolling="no"></iframe>
+<iframe id="blocklyFrame" src="./blockly/index.html#sim" height="680" width="810" frameBorder="0" scrolling="no" style="float:left"></iframe>
+<iframe id="controlFrame" src="./bot-ctrl.html#sim" height="200" width="520" frameBorder="0" scrolling="no" align="top" style="float:left"></iframe>
+<iframe id="gameFrame" src="./bot-game.html" height="680" width="520" frameBorder="0" scrolling="no"  align="top" style="float:left"></iframe>
 <script>
 
 var blocklyFrame = document.getElementById("blocklyFrame").contentWindow;
 var gameFrame = document.getElementById("gameFrame").contentWindow;
+var controlFrame = document.getElementById("controlFrame").contentWindow;
 var domain = "*";
 
 function messageListener(event) {
-  if(event.data.distance)
+  if(event.data.distance) {
     blocklyFrame.postMessage(event.data, domain);
-  if(event.data.action) 
+    controlFrame.postMessage(event.data, domain);
+  }
+  if(event.data.action)
     gameFrame.postMessage(event.data, domain);
 }
 

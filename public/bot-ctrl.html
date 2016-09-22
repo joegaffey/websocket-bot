@@ -4,7 +4,6 @@
   <title>Robot Controller</title>
   <script src="./lib/socket.io-1.2.0.js"></script>
   <script src="./robot.js"></script>
-  <script src="./test-robot.js"></script>
   <script src="./keyboard.js"></script>
   <style>
   body {
@@ -30,13 +29,14 @@
     width: 100px;
     height: 100px;
   }
-  #distanceEq > table {
-    height: 100%;
+  #eqTable {
     width: 100%;
+    height: 100%;
   }
   td {
-    margin: 10px;
-    background-color: green;
+    margin: 5px;
+    background-color: white;
+    border: 2px solid green;
   }
   </style>
 </head>
@@ -55,40 +55,95 @@
 
   <div id="distance">
     <div>Distance (CM)</div>
-    <!-- <div id="distanceEq">
-      <table>
+    <div id="distanceEq">
+      <table id="eqTable">
         <tr><td></td></tr>
         <tr><td></td></tr>
         <tr><td></td></tr>
         <tr><td></td></tr>
         <tr><td></td></tr>
       </table>
-    </div> -->
+    </div>
     <div id="distanceVal"></div>
   </div>
 
 <script>
-var t1 = 20;
-var t2 = 30;
 
-document.addEventListener('keydown', keyDownHandler, false);
+var colors = ['red','orange','green','green','green'];
 
 var distanceValEl = document.getElementById('distanceVal');
+var eqCells = document.querySelectorAll('table#eqTable td');
+
+var AUDIO_VOLUME = 0.2;
+var REFRESH_DELAY = 1000;
+
+var ctx = new (window.AudioContext || window.webkitAudioContext)();
+var o = ctx.createOscillator();
+o.type = 'square';
+
+var g = ctx.createGain();
+g.gain.value = 0;
+o.connect(g);
+g.connect(ctx.destination);
+o.start(0);
+
+document.addEventListener('keydown', keyDownHandler, false);
 
 setInterval(function() {
   var distance = robot_get_distance();
   distanceValEl.textContent = distance;
+  var step = Math.floor(distance / 20);
+  if(step > 4)
+    step = 4;
+  setColor(step);
+  if(distance > 1)
+    beep(step);
+}, REFRESH_DELAY);
 
-  if(distance < t1) {
-    distanceValEl.style.color = 'red';
-  }
-  else if(distance < t2) {
-    distanceValEl.style.color = 'orange';
-  }
-  else {
-    distanceValEl.style.color = 'green';
-  }
-}, 300);
+function setColor(step) {
+  var color = colors[step];
+  distanceValEl.style.color = color;
+  eqCells.forEach(function(cell, index) {
+    cell.style.borderColor = color;
+    if(index == step)
+      cell.style.backgroundColor = color
+    else
+      cell.style.backgroundColor = 'white';
+  });
+}
+
+function beep(step) {
+  o.frequency.value = ((5 - step) * (5 - step) * 100);
+  g.gain.value = AUDIO_VOLUME * (5 - step);
+  setTimeout(function(){ g.gain.value = 0; }, 100);
+}
+
+processHash();
+
+window.onhashchange = function() {
+  processHash();
+};
+
+function processHash() {
+  switchMode(window.location.hash.substring(1));
+}
+
+function switchMode(mode) {
+  if(mode == 'sim')
+    loadJS("./postmessage-robot.js");
+  else if(mode == 'test')
+    loadJS("./test-robot.js");
+  else if(mode == 'robot')
+    loadJS("./websocket-robot.js");
+  console.log("Mode: " + mode);
+}
+
+function loadJS(file) {
+  var script = document.createElement("script");
+  script.type = "application/javascript";
+  script.src = file;
+  document.body.appendChild(script);
+}
 
 </script>
 </body>
