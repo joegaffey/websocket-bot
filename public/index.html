@@ -3,25 +3,35 @@
   <style>
   #blocklyDiv {
     height: 800px;
-    width: 400px;
+    width: 500px;
     float:left;
   }
   #controlDiv {
     width:auto;
     height:200px;
     overflow:hidden;
+    padding: 0;
+    margin: 0;
   }
   #gameDiv {
     width:auto;
-    max-width: 600;
+    max-width: 600px;
     height:450px;
     overflow:hidden;
+  }
+  #controlDivLeft, #controlDivRight {
+    float: left;
+    width:50%;
+    height:100%;
   }
   </style>
 </head>
 <body>
 <div id="blocklyDiv"><iframe id="blocklyFrame" src="./blockly/index.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
-<div id="controlDiv"><iframe id="controlFrame" src="./bot-ctrl.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
+<div id="controlDiv">
+  <div id="controlDivLeft"><iframe id="controlFrame" src="./bot-ctrl.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
+  <div id="controlDivRight"><iframe id="timerFrame" src="./timer.html" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
+</div>
 <div id="gameDiv"><iframe id="gameFrame" src="./bot-game.html" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
 <script>
 
