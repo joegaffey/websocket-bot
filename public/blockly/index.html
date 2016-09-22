@@ -13,286 +13,285 @@
 </head>
 <body>
 
-  <p>
-    <button onclick="showCode()">Show code</button>
-    <button onclick="runCode()">Execute</button>
-    <button onclick="halt()">Halt</button>
-    <button onclick="downloadXML()">Export</button>
-    <input id="fileInput" type="file" style="display:none;" onchange="fileSelected(this)"/>
-    <input type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
-  </p>
+<p>
+  <button onclick="showCode()">Show code</button>
+  <button onclick="runCode()">Execute</button>
+  <button onclick="halt()">Halt</button>
+  <button onclick="downloadXML()">Export</button>
+  <input id="fileInput" type="file" style="display:none;" onchange="fileSelected(this)"/>
+  <input type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
+</p>
 
-  <div id="blocklyDiv" style="height: 600px; width: 800px;"></div>
+<div id="blocklyDiv" style="height: 600px; width: 380px;"></div>
 
-  <xml id="toolbox" style="display: none">
-    <category name="Robot">
-      <block type="stop"></block>
-      <block type="turn_left"></block>
-      <block type="turn_right"></block>
-      <block type="forward"></block>
-      <block type="backward"></block>
-      <block type="get_distance"></block>
-      <block type="led_on"></block>
-      <block type="led_off"></block>
-      <block type="ping"></block>
-    </category>
+<xml id="toolbox" style="display: none">
+  <category name="Robot">
+    <block type="stop"></block>
+    <block type="turn_left"></block>
+    <block type="turn_right"></block>
+    <block type="forward"></block>
+    <block type="backward"></block>
+    <block type="get_distance"></block>
+    <block type="led_on"></block>
+    <block type="led_off"></block>
+    <block type="ping"></block>
+  </category>
 
-    <category name="Logic">
-      <block type="controls_if"></block>
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-      <block type="logic_negate"></block>
-      <block type="logic_boolean"></block>
-    </category>
+  <category name="Logic">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+  </category>
 
-    <category name="Flow">
-      <block type="controls_repeat_ext">
-        <value name="TIMES">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-      </block>
-      <block type="controls_whileUntil"></block>
-      <block type="wait"></block>
-    </category>
+  <category name="Flow">
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <block type="math_number">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+    <block type="controls_whileUntil"></block>
+    <block type="wait"></block>
+  </category>
 
-    <category name="Math">
-      <block type="math_number"></block>
-      <block type="math_arithmetic"></block>
-      <block type="math_single"></block>
-      <block type="math_random_int">
-        <value name="FROM">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="TO">
-          <block type="math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-      </block>
-      <block type="math_random_float"></block>
-    </category>
+  <category name="Math">
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="math_single"></block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+    <block type="math_random_float"></block>
+  </category>
 
-    <category name="Keyboard">
-      <block type="get_key_char"></block>
-      <block type="get_key_code"></block>
-    </category>
+  <category name="Keyboard">
+    <block type="get_key_char"></block>
+    <block type="get_key_code"></block>
+  </category>
 
-    <category name="Text">
-      <block type="text_print"></block>
-      <block type="text"></block>
-    </category>
-  </xml>
+  <category name="Text">
+    <block type="text_print"></block>
+    <block type="text"></block>
+  </category>
+</xml>
 
-  <xml id="startBlocks" style="display: none"></xml>
+<xml id="startBlocks" style="display: none"></xml>
 
-  <script>
+<script>
 
-  var keyEvent = null;
+var keyEvent = null;
 
-  document.addEventListener('keydown', (event) => {
-    keyEvent = event
-  }, false);
+document.addEventListener('keydown', (event) => {
+  keyEvent = event
+}, false);
 
-  if(window.self !== window.top)
-    addEventListener('message', messageListener);
+if(window.self !== window.top)
+  addEventListener('message', messageListener);
 
-  function messageListener() {
-    if(event.data.mode) {
-      switchMode(event.data.mode);
-    }
+function messageListener() {
+  if(event.data.mode) {
+    switchMode(event.data.mode);
   }
+}
 
+processHash();
+
+window.onhashchange = function() {
   processHash();
+};
 
-  window.onhashchange = function() {
-    processHash();
+function processHash() {
+  switchMode(window.location.hash.substring(1));
+}
+
+function switchMode(mode) {
+  if(mode == 'sim')
+    loadJS("../postmessage-robot.js");
+  else if(mode == 'test')
+    loadJS("../test-robot.js");
+  else if(mode == 'robot')
+    loadJS("../websocket-robot.js");
+  console.log("Mode: " + mode);
+}
+
+function loadJS(file) {
+  var script = document.createElement("script");
+  script.type = "application/javascript";
+  script.src = file;
+  document.body.appendChild(script);
+}
+
+function get_key_char(time) {
+  return keyEvent.key;
+}
+
+function get_key_code(time) {
+  return keyEvent.keyCode;
+}
+
+var toolboxEl = document.getElementById('toolbox');
+var workspace = Blockly.inject('blocklyDiv', { media: './media/', toolbox: toolboxEl });
+Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
+
+function showCode() {
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+  var code = Blockly.JavaScript.workspaceToCode(workspace);
+  alert(code);
+}
+
+function runCode() {
+  window.LoopTrap = 1000;
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+  var code = Blockly.JavaScript.workspaceToCode(workspace);
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+  try {
+    halted = false;
+    myInterpreter = new Interpreter(code, initApi);
+    nextStep();
+  }
+  catch (e) {
+    console.log(e);
+    alert(e);
+  }
+}
+
+function halt() {
+  halted = true;
+}
+
+function loadXML(xml) {
+  if (typeof xml != "string" || xml.length < 5) {
+      alert("No Input");
+      return false;
+      return;
+  }
+  try {
+      var dom = Blockly.Xml.textToDom(xml);
+      Blockly.mainWorkspace.clear();
+      Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+      return true;
+  } catch (e) {
+      alert("Invalid xml");
+      return false;
+  }
+}
+
+function downloadXML() {
+  var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+  var a = document.createElement('a');
+  var file = new Blob([xmlText], {type:  'text/plain'});
+  a.href = URL.createObjectURL(file);
+  a.download = new Date().getTime() + '.xml';
+  a.click();
+  window.URL.revokeObjectURL(a.href);
+}
+
+function fileSelected(input) {
+  var reader = new FileReader();
+  console.log(input.files[0]);
+  reader.readAsText(input.files[0]);
+  reader.onloadend = function() {
+    loadXML(reader.result);
   };
+}
 
-  function processHash() {
-    switchMode(window.location.hash.substring(1));
+var myInterpreter = null;
+
+function initApi(interpreter, scope) {
+
+  var wrapper = function(text) {
+    text = text ? text.toString() : '';
+    return interpreter.createPrimitive(alert(text));
+  };
+  interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function(d) {
+    return interpreter.createPrimitive(wait(d));
+  };
+  interpreter.setProperty(scope, 'wait', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_left());
+  };
+  interpreter.setProperty(scope, 'robot_left', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_right());
+  };
+  interpreter.setProperty(scope, 'robot_right', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_forward());
+  };
+  interpreter.setProperty(scope, 'robot_forward', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_backward());
+  };
+  interpreter.setProperty(scope, 'robot_backward', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_stop());
+  };
+  interpreter.setProperty(scope, 'robot_stop', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_ledOn());
+  };
+  interpreter.setProperty(scope, 'robot_ledOn', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_ledOff());
+  };
+  interpreter.setProperty(scope, 'robot_ledOff', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_get_distance());
+  };
+  interpreter.setProperty(scope, 'robot_get_distance', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot_ping());
+  };
+  interpreter.setProperty(scope, 'robot_ping', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(get_key_char());
+  };
+  interpreter.setProperty(scope, 'get_key_char', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(get_key_code());
+  };
+  interpreter.setProperty(scope, 'get_key_code', interpreter.createNativeFunction(wrapper));
+}
+
+var nextStepDelay = 0;
+
+function wait(time) {
+  nextStepDelay = time;
+}
+
+function nextStep() {
+  if (!halted && myInterpreter.step()) {
+    window.setTimeout(nextStep, nextStepDelay);
+    nextStepDelay = 0;
   }
+}
 
-  function switchMode(mode) {
-    if(mode == 'sim')
-      loadJS("../postmessage-robot.js");
-    else if(mode == 'test')
-      loadJS("../test-robot.js");
-    else if(mode == 'robot')
-      loadJS("../websocket-robot.js");
-    console.log("Mode: " + mode);
-  }
-
-  function loadJS(file) {
-    var script = document.createElement("script");
-    script.type = "application/javascript";
-    script.src = file;
-    document.body.appendChild(script);
-  }
-
-  function get_key_char(time) {
-    return keyEvent.key;
-  }
-
-  function get_key_code(time) {
-    return keyEvent.keyCode;
-  }
-
-  var toolboxEl = document.getElementById('toolbox');
-  var workspace = Blockly.inject('blocklyDiv', { media: './media/', toolbox: toolboxEl });
-  Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
-
-  function showCode() {
-    Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-    var code = Blockly.JavaScript.workspaceToCode(workspace);
-    alert(code);
-  }
-
-  function runCode() {
-    window.LoopTrap = 1000;
-    Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
-    var code = Blockly.JavaScript.workspaceToCode(workspace);
-    Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-    try {
-      halted = false;
-      myInterpreter = new Interpreter(code, initApi);
-      nextStep();
-    }
-    catch (e) {
-      console.log(e);
-      alert(e);
-    }
-  }
-
-  function halt() {
-    halted = true;
-  }
-
-  function loadXML(xml) {
-    if (typeof xml != "string" || xml.length < 5) {
-        alert("No Input");
-        return false;
-        return;
-    }
-    try {
-        var dom = Blockly.Xml.textToDom(xml);
-        Blockly.mainWorkspace.clear();
-        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
-        return true;
-    } catch (e) {
-        alert("Invalid xml");
-        return false;
-    }
-  }
-
-  function downloadXML() {
-    var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-    var a = document.createElement('a');
-    var file = new Blob([xmlText], {type:  'text/plain'});
-    a.href = URL.createObjectURL(file);
-    a.download = new Date().getTime() + '.xml';
-    a.click();
-    window.URL.revokeObjectURL(a.href);
-  }
-
-  function fileSelected(input) {
-    var reader = new FileReader();
-    console.log(input.files[0]);
-    reader.readAsText(input.files[0]);
-    reader.onloadend = function() {
-      loadXML(reader.result);
-    };
-  }
-
-  var myInterpreter = null;
-
-  function initApi(interpreter, scope) {
-
-    var wrapper = function(text) {
-      text = text ? text.toString() : '';
-      return interpreter.createPrimitive(alert(text));
-    };
-    interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function(d) {
-      return interpreter.createPrimitive(wait(d));
-    };
-    interpreter.setProperty(scope, 'wait', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_left());
-    };
-    interpreter.setProperty(scope, 'robot_left', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_right());
-    };
-    interpreter.setProperty(scope, 'robot_right', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_forward());
-    };
-    interpreter.setProperty(scope, 'robot_forward', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_backward());
-    };
-    interpreter.setProperty(scope, 'robot_backward', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_stop());
-    };
-    interpreter.setProperty(scope, 'robot_stop', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_ledOn());
-    };
-    interpreter.setProperty(scope, 'robot_ledOn', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_ledOff());
-    };
-    interpreter.setProperty(scope, 'robot_ledOff', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_get_distance());
-    };
-    interpreter.setProperty(scope, 'robot_get_distance', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(robot_ping());
-    };
-    interpreter.setProperty(scope, 'robot_ping', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(get_key_char());
-    };
-    interpreter.setProperty(scope, 'get_key_char', interpreter.createNativeFunction(wrapper));
-
-    var wrapper = function() {
-      return interpreter.createPrimitive(get_key_code());
-    };
-    interpreter.setProperty(scope, 'get_key_code', interpreter.createNativeFunction(wrapper));
-  }
-
-  var nextStepDelay = 0;
-
-  function wait(time) {
-    nextStepDelay = time;
-  }
-
-  function nextStep() {
-    if (!halted && myInterpreter.step()) {
-      window.setTimeout(nextStep, nextStepDelay);
-      nextStepDelay = 0;
-    }
-  }
-
-  </script>
-
+</script>
 </body>
 </html>

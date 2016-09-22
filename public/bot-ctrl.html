@@ -51,6 +51,7 @@
     <button onclick="robot_ledOff()">Led Off</button>
     <button onclick="robot_ping()">Ping</button>
     <button onclick="robot_reset()">Reset</button>
+    <button onclick="toggle_sound()">Sound</button>
   </div>
 
   <div id="distance">
@@ -77,6 +78,8 @@ var eqCells = document.querySelectorAll('table#eqTable td');
 var AUDIO_VOLUME = 0.2;
 var REFRESH_DELAY = 1000;
 
+var audio_vol = AUDIO_VOLUME;
+
 var ctx = new (window.AudioContext || window.webkitAudioContext)();
 var o = ctx.createOscillator();
 o.type = 'square';
@@ -87,6 +90,23 @@ o.connect(g);
 g.connect(ctx.destination);
 o.start(0);
 
+document.addEventListener('visibilitychange', function(){
+    if (document.hidden) {
+      audio_vol = 0;
+    }
+    else {
+      audio_vol = AUDIO_VOLUME;
+    }
+},false);
+
+var audioOn = true;
+function toggle_sound() {
+  if(audioOn)
+    audioOn = false;
+  else
+    audioOn = true;
+}
+
 document.addEventListener('keydown', keyDownHandler, false);
 
 setInterval(function() {
@@ -96,7 +116,7 @@ setInterval(function() {
   if(step > 4)
     step = 4;
   setColor(step);
-  if(distance > 1)
+  if(distance > 1 && audioOn)
     beep(step);
 }, REFRESH_DELAY);
 
@@ -114,7 +134,7 @@ function setColor(step) {
 
 function beep(step) {
   o.frequency.value = ((5 - step) * (5 - step) * 100);
-  g.gain.value = AUDIO_VOLUME * (5 - step);
+  g.gain.value = audio_vol * (5 - step);
   setTimeout(function(){ g.gain.value = 0; }, 100);
 }
 
