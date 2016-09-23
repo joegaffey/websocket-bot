@@ -5,7 +5,7 @@ Blockly.Blocks['turn_left'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Turn the robot left');
   }
 };
@@ -21,7 +21,7 @@ Blockly.Blocks['turn_right'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Turn the robot right');
   }
 };
@@ -37,7 +37,7 @@ Blockly.Blocks['forward'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Move the robot forwards');
   }
 };
@@ -53,7 +53,7 @@ Blockly.Blocks['backward'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Move the robot backwards');
   }
 };
@@ -69,7 +69,7 @@ Blockly.Blocks['stop'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Stop the robot!');
   }
 };
@@ -85,7 +85,7 @@ Blockly.Blocks['ping'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Trigger a distance update');
   }
 };
@@ -101,7 +101,7 @@ Blockly.Blocks['get_distance'] = {
     this.appendDummyInput().appendField("get_distance");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Get the distance to the nearest obstacle in front of the robot in cm');
   }
 };
@@ -117,7 +117,7 @@ Blockly.Blocks['led_on'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Turn on the LED');
   }
 };
@@ -133,7 +133,7 @@ Blockly.Blocks['led_off'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(210);
+    this.setColour(35);
     this.setTooltip('Turn off the LED');
   }
 };
@@ -148,7 +148,7 @@ Blockly.Blocks['get_key_char'] = {
     this.appendDummyInput().appendField("get_key_char");
     this.setInputsInline(true);
     this.setOutput(true, "String");
-    this.setColour(210);
+    this.setColour(300);
     this.setTooltip('Get the last key pressed');
   }
 };
@@ -163,7 +163,7 @@ Blockly.Blocks['get_key_code'] = {
     this.appendDummyInput().appendField("get_key_code");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(210);
+    this.setColour(300);
     this.setTooltip('Get the last key pressed');
   }
 };
