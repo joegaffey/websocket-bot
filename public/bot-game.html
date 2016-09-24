@@ -212,6 +212,10 @@ function robot_left() {
   bot.rotLeft = true;
 }
 
+function robot_say(text) {
+  window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+}
+
 function robot_right() {
   robot_stop();
   bot.rotRight = true;
@@ -225,6 +229,7 @@ function play() {
     robot_stop();
     stage.addChild(winText);
     gameOver = true;
+    robot_say('Congratulations. You have reached your destination.');
     return;
   }
   distance = Math.min(getMinWallDistance(), getMinObstacleDistance());
@@ -234,6 +239,7 @@ function play() {
     robot_stop();
     stage.addChild(loseText);
     gameOver = true;
+    robot_say('Your algirithim was flawed. You have failed your mission.');
     return;
   }
   if(window.self !== window.top)
