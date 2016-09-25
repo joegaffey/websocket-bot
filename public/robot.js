@@ -9,16 +9,13 @@ actions.ledOff = 6;
 actions.ping = 7;
 actions.reset = 8;
 
-var distance = 999;
-var lastDistance = distance;
-
 robot_left = function() {
-  robot_say('Turning left');
+  robot_say('Bearing left');
   sendMessage(actions.left);
 };
 
 robot_right = function() {
-  robot_say('Turning right');
+  robot_say('Bearing right');
   sendMessage(actions.right);
 };
 
@@ -55,22 +52,26 @@ robot_reset = function() {
   sendMessage(actions.reset);
 };
 
+var distance = 999;
+var lastDistance = distance;
 robot_get_distance = function() {
   if(lastDistance != distance) {
     if(distance === -1)
-      robot_say('Your algorithim is flawed. You have failed your mission.');
+      robot_say('The algorithm is flawed. The mission has failed.');
     else if(distance === -2)
-      robot_say('Congratulations. Your algorithim is satisfactory. You have reached your destination.');
+      robot_say('The algorithim is satisfactory. I have reached my destination. Thank you.');
   }
   lastDistance = distance;
   return distance;
 };
 
 var lastText = null;
-
 function robot_say(text) {
   if(lastText !== text) {
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+    var speech = new SpeechSynthesisUtterance(text)
+    speech.pitch = 0.1;
+    speech.rate = 1.3;
+    window.speechSynthesis.speak(speech);
   }
   lastText = text;
 }

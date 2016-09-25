@@ -19,19 +19,11 @@
     height:450px;
     overflow:hidden;
   }
-  #controlDivLeft, #controlDivRight {
-    float: left;
-    width:50%;
-    height:100%;
-  }
   </style>
 </head>
 <body>
 <div id="blocklyDiv"><iframe id="blocklyFrame" src="./blockly/index.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
-<div id="controlDiv">
-  <div id="controlDivLeft"><iframe id="controlFrame" src="./bot-ctrl.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
-  <div id="controlDivRight"><iframe id="timerFrame" src="./timer.html" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
-</div>
+<div id="controlDiv"><iframe id="controlFrame" src="./bot-ctrl.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
 <div id="gameDiv"><iframe id="gameFrame" src="./bot-game.html" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
 <script>
 
@@ -45,8 +37,10 @@ function messageListener(event) {
     blocklyFrame.postMessage(event.data, domain);
     controlFrame.postMessage(event.data, domain);
   }
-  if(event.data.action)
+  if(event.data.action) {
     gameFrame.postMessage(event.data, domain);
+    controlFrame.postMessage(event.data, domain);
+  }
 }
 
 addEventListener('message', messageListener);

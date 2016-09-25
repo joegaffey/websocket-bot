@@ -10,31 +10,46 @@
     font-family: Arial, Helvetica, sans-serif;
   }
   button {
-    width: 60px;
-  }
-  #controls {
-    padding: 5px;
+    width: 75px;
   }
   #distance {
-    font-size: 12pt;
-    padding: 5px;
+    position: absolute;
+    left: 0px;
+    width: 50%;
+  }
+  #timer {
+    position: absolute;
+    right: 0px;
+    width: 50%;
   }
   #distanceVal {
+    position: absolute;
+    left: 100px;
+    top: 5px;
     color: green;
-    float: left;
-    font-size: 60pt;
-    width: 100px;
-    padding-left: 20px;
+    font-size: 48pt;
   }
   #distanceEq {
-    padding-top: 5px;
-    float: left;
-    width: 100px;
-    height: 80px;
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    width: 70px;
+    height: 75px;
   }
   #eqTable {
     width: 100%;
     height: 100%;
+  }
+  #time {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    color: green;
+    font-size: 32pt;
+  }
+  h4 {
+    margin-top: 12px;
+    margin-bottom: 6px;
   }
   td {
     background-color: white;
@@ -43,44 +58,97 @@
   </style>
 </head>
 <body>
+  <h4>Robot</h4>
   <div id="controls">
     <button onclick="robot_stop()">Stop</button>
+    <button onclick="robot_ledOn()">LED On</button>
+    <button onclick="robot_ledOff()">LED Off</button>
+    <button onclick="robot_ping()">Ping</button>
     <button onclick="robot_forward()">Forward</button>
     <button onclick="robot_backward()">Back</button>
-    <button onclick="robot_right()">Right</button>
     <button onclick="robot_left()">Left</button>
-    <button onclick="robot_ledOn()">Led On</button>
-    <button onclick="robot_ledOff()">Led Off</button>
-    <button onclick="robot_ping()">Ping</button>
-    <button onclick="robot_reset()">Reset</button>
-    <button onclick="toggle_sound()">Sound</button>
+    <button onclick="robot_right()">Right</button>
   </div>
 
-  <div id="distance">
-    <div>Distance (CM)</div>
-    <div id="distanceEq">
-      <table id="eqTable">
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-      </table>
+  <h4>Environment</h4>
+  <button onclick="reset()">Reset</button>
+  <button id="beepButton" onclick="toggle_sound()">Beep Off</button>
+
+  <div id="env_controls">
+    <div id="distance">
+      <div id="distanceEq">
+        <table id="eqTable">
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+        </table>
+      </div>
+      <div id="distanceVal"></div>
     </div>
-    <div id="distanceVal"></div>
+    <div id="timer">
+      Time:
+      <div id="time">00:00:00</div>
+    </div>
   </div>
+
 
 <script>
 
 var colors = ['red','orange','green','green','green'];
 
 var distanceValEl = document.getElementById('distanceVal');
+var beepButtonEl = document.getElementById('beepButton');
 var eqCells = document.querySelectorAll('table#eqTable td');
 
 var AUDIO_VOLUME = 0.02;
 var REFRESH_DELAY = 1000;
 
 var audio_vol = AUDIO_VOLUME;
+
+var GAME_TIME = 600000;
+var WARNING_TIME = 120000;
+var DANGER_TIME = 60000;
+
+var startTime;
+var timerStopped = true;
+var timeEl = document.getElementById('time');
+
+function messageListener(event) {
+  if(event.data.action && timerStopped) {
+    console.log(event.data.action);
+    if(![actions.stop,  actions.reset].includes(event.data.action))
+      startTimer();
+  }
+}
+
+if(window.self !== window.top)
+  addEventListener('message', messageListener);
+
+function startTimer() {
+  timerStopped = false;
+  toggle_sound();
+  startTime = new Date().getTime();
+  setInterval(function() {
+    var delta = GAME_TIME - (new Date().getTime() - startTime);
+    if(timerStopped || delta < 0)
+      return;
+    if(delta < WARNING_TIME)
+      time.style.color = 'orange';
+    if(delta < DANGER_TIME)
+      time.style.color = 'red';
+    time.innerHTML =  Math.floor(delta / 60000) + ':' +
+                      Math.floor((delta % 60000) / 1000) + ':' +
+                      Math.floor((delta % 1000) / 10);
+  }, 250);
+}
+
+function reset() {
+  timerStopped = true;
+  robot_reset();
+  time.innerHTML = "00:00:00";
+}
 
 var ctx = new (window.AudioContext || window.webkitAudioContext)();
 var o = ctx.createOscillator();
@@ -101,24 +169,30 @@ document.addEventListener('visibilitychange', function(){
     }
 },false);
 
-var audioOn = true;
+var beepOn = false;
 function toggle_sound() {
-  if(audioOn)
-    audioOn = false;
-  else
-    audioOn = true;
+  if(beepOn) {
+    beepOn = false;
+    beepButtonEl.innerHTML = 'Beep On';
+  }
+  else {
+    beepOn = true;
+    beepButtonEl.innerHTML = 'Beep Off';
+  }
 }
 
 document.addEventListener('keydown', keyDownHandler, false);
 
 setInterval(function() {
   var distance = robot_get_distance();
+  if(distance < 0)
+    timerStopped = true;
   distanceValEl.textContent = distance;
   var step = Math.floor(distance / 20);
   if(step > 4)
     step = 4;
   setColor(step);
-  if(distance > 1 && audioOn)
+  if(distance > 1 && beepOn)
     beep(step);
 }, REFRESH_DELAY);
 
