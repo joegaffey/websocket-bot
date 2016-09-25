@@ -228,8 +228,8 @@ function play() {
   if(homeReached()) {
     robot_stop();
     stage.addChild(winText);
+    parent.postMessage({'distance': -2 }, domain);
     gameOver = true;
-    robot_say('Congratulations. You have reached your destination.');
     return;
   }
   distance = Math.min(getMinWallDistance(), getMinObstacleDistance());
@@ -238,8 +238,8 @@ function play() {
   if (distance <= MIN_DISTANCE) {
     robot_stop();
     stage.addChild(loseText);
+    parent.postMessage({'distance': -1 }, domain);
     gameOver = true;
-    robot_say('Your algirithim was flawed. You have failed your mission.');
     return;
   }
   if(window.self !== window.top)
