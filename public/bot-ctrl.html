@@ -8,6 +8,7 @@
   <style>
   body {
     font-family: Arial, Helvetica, sans-serif;
+    min-width: 970px;
   }
   button {
     width: 75px;
@@ -34,13 +35,13 @@
   }
   #distanceEq {
     float: left;
-    margin-top: 5px;
+    margin-top: 6px;
     width: 70px;
-    height: 70px;
+    height: 60px;
   }
   #distanceVal {
     margin-left: 80px;
-    margin-top: 5px;
+    margin-top: 0;
     color: green;
     font-size: 48pt;
   }
@@ -61,6 +62,7 @@
   <button onclick="robot_ledOn()">LED On</button>
   <button onclick="robot_ledOff()">LED Off</button>
   <button onclick="robot_ping()">Ping</button>
+  <br/>
   <button onclick="robot_forward()">Forward</button>
   <button onclick="robot_backward()">Back</button>
   <button onclick="robot_left()">Left</button>
@@ -69,7 +71,7 @@
 
 <h4>Environment</h4>
 <button onclick="reset()">Reset</button>
-<button id="beepButton" onclick="toggle_sound()">Beep Off</button>
+<button id="beepButton" onclick="toggle_beep()">Beep Off</button>
 
 <div id="env_controls">
   <div id="distance">
@@ -85,7 +87,7 @@
     <div id="distanceVal"></div>
   </div>
   <div id="timer">
-    Time:
+    Time Remaining:
     <div id="time">00:00:00</div>
   </div>
 </div>
@@ -113,8 +115,9 @@ var timeEl = document.getElementById('time');
 
 function messageListener(event) {
   if(event.data.action && timerStopped) {
-    if(![actions.stop,  actions.reset].includes(event.data.action))
+    if(![actions.stop,  actions.reset].includes(event.data.action)) {
       startTimer();
+    }
   }
 }
 
@@ -123,7 +126,7 @@ if(window.self !== window.top)
 
 function startTimer() {
   timerStopped = false;
-  toggle_sound();
+  turnBeepOn();
   startTime = new Date().getTime();
   setInterval(function() {
     var delta = GAME_TIME - (new Date().getTime() - startTime);
@@ -133,15 +136,22 @@ function startTimer() {
       time.style.color = 'orange';
     if(delta < DANGER_TIME)
       time.style.color = 'red';
-    time.innerHTML =  Math.floor(delta / 60000) + ':' +
-                      Math.floor((delta % 60000) / 1000) + ':' +
-                      Math.floor((delta % 1000) / 10);
+    time.innerHTML =  pad(Math.floor(delta / 60000)) + ':' +
+                      pad(Math.floor((delta % 60000) / 1000)) + ':' +
+                      pad(Math.floor((delta % 1000) / 10));
   }, 250);
+}
+
+function pad(num) {
+  var str = num + '';
+  var pad = '00';
+  return pad.substring(0, pad.length - str.length) + str;
 }
 
 function reset() {
   timerStopped = true;
   robot_reset();
+  turnBeepOff();
   time.innerHTML = "00:00:00";
 }
 
@@ -165,15 +175,21 @@ document.addEventListener('visibilitychange', function(){
 },false);
 
 var beepOn = false;
-function toggle_sound() {
-  if(beepOn) {
-    beepOn = false;
-    beepButtonEl.innerHTML = 'Beep On';
-  }
-  else {
-    beepOn = true;
-    beepButtonEl.innerHTML = 'Beep Off';
-  }
+function toggle_beep() {
+  if(beepOn)
+    turnBeepOff();
+  else
+    turnBeepOn();
+}
+
+function turnBeepOff() {
+  beepOn = false;
+  beepButtonEl.innerHTML = 'Beep On';
+}
+
+function turnBeepOn() {
+  beepOn = true;
+  beepButtonEl.innerHTML = 'Beep Off';
 }
 
 document.addEventListener('keydown', keyDownHandler, false);
