@@ -91,6 +91,8 @@
 
 <script>
 
+var frame_id = 'blockly';
+
 var keyEvent = null;
 
 document.addEventListener('keydown', (event) => {
@@ -133,12 +135,18 @@ function loadJS(file) {
   document.body.appendChild(script);
 }
 
-function get_key_char(time) {
-  return keyEvent.key;
+function get_key_char() {
+  if(keyEvent)
+    return keyEvent.key;
+  else
+    return '';
 }
 
-function get_key_code(time) {
-  return keyEvent.keyCode;
+function get_key_code() {
+  if(keyEvent)
+    return keyEvent.keyCode;
+  else
+    return '';
 }
 
 var toolboxEl = document.getElementById('toolbox');

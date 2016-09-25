@@ -5,5 +5,5 @@ function sendMessage(msg) {
 }
 
 socket.on('distance', function (data) {
-  distance = parseInt(data);
+  robot_set_distance(parseInt(data));
 });

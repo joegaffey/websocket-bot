@@ -38,6 +38,20 @@ body {
 <canvas id="stage"></canvas>
 <script>
 
+var actions = {};
+actions.stop = 'STOP';
+actions.forward = 'FWD';
+actions.backward = 'BACK';
+actions.right = 'RIGHT';
+actions.left = 'LEFT';
+actions.ledOn = 'LEDON';
+actions.ledOff = '`LEDOFF`';
+actions.ping = 'PING';
+actions.reset = 'RESET';
+
+var CRASH = -1;
+var FINISH = -2;
+
 var SPEED = 0.4,
     SPEED_TO_ROT = 30,
     MIN_DISTANCE = 0,
@@ -225,24 +239,24 @@ function play() {
   if(gameOver)
     return;
   move();
-  if(homeReached()) {
+  if(homeReached() && !gameOver) {
     robot_stop();
     stage.addChild(winText);
-    parent.postMessage({'distance': -2 }, domain);
+    parent.postMessage({'distance': FINISH }, domain);
     gameOver = true;
     return;
   }
   distance = Math.min(getMinWallDistance(), getMinObstacleDistance());
   distanceText.text = distanceMessage + distance;
 
-  if (distance <= MIN_DISTANCE) {
+  if (distance <= MIN_DISTANCE && !gameOver) {
     robot_stop();
     stage.addChild(loseText);
-    parent.postMessage({'distance': -1 }, domain);
+    parent.postMessage({'distance': CRASH }, domain);
     gameOver = true;
     return;
   }
-  if(window.self !== window.top)
+  if(window.self !== window.top && !gameOver)
     sendMessage(distance);
 }
 
@@ -291,22 +305,22 @@ function sendMessage(distance){
 
 function messageListener(event) {
   switch(event.data.action) {
-    case 10:
+    case actions.stop:
         robot_stop();
         break;
-    case 1:
+    case actions.forward:
         robot_forward();
         break;
-    case 2:
+    case actions.backward:
         robot_back();
         break;
-    case 3:
+    case actions.right:
         robot_right();
         break;
-    case 4:
+    case actions.left:
         robot_left();
         break;
-    case 8:
+    case actions.reset:
         robot_reset();
         break;
     default:
