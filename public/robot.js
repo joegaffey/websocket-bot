@@ -66,7 +66,11 @@ robot_get_distance = function() {
   return distance;
 };
 
+var lastText = null;
+
 function robot_say(text) {
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+  if(lastText !== text) {
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+  }
+  lastText = text;
 }

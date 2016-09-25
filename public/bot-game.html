@@ -96,8 +96,8 @@ var distanceStyle = {
     fill: 'black'
 }
 
-var winText = new PIXI.Text("You Won!\nGAME OVER!", winStyle);
-var loseText = new PIXI.Text("You Lost!\nGAME OVER!", loseStyle);
+var winText = new PIXI.Text("Mission Complete!", winStyle);
+var loseText = new PIXI.Text("Mission Failed!", loseStyle);
 var distanceText = new PIXI.Text(distanceMessage + distance, distanceStyle);
 
 if(window.location.hash.substring(1) === "keyboard")
