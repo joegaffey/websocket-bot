@@ -1,7 +1,11 @@
-function sendMessage(msg) {
-  console.log(msg);
-}
+var testBot = new function() {
 
-setInterval(function() {
-  robot.set_distance(Math.floor(Math.random() * 100));
-}, 1000);
+  this.sendMessage = function(msg) {
+    console.log(msg);
+  }
+
+  setInterval(function() {
+    if(this === botImpl)
+      robot.set_distance(Math.floor(Math.random() * 100));
+  }, 1000);
+};

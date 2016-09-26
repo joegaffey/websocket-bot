@@ -1,7 +1,7 @@
-var domain = '*';
+var pmBot = new function() {
 
-function sendMessage(msg) {
-  parent.postMessage({'action': msg}, domain);
+this.sendMessage = function(msg) {
+  parent.postMessage({'action': msg}, '*');
 }
 
 function botMessageListener(event) {
@@ -11,3 +11,4 @@ function botMessageListener(event) {
 }
 
 addEventListener('message', botMessageListener);
+};
