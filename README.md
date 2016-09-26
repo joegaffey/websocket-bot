@@ -13,4 +13,4 @@ npm install express socket.io serialport
 ```javascript
 node server.js [serial port] [baud rate]
 ```
-* Point you browser to http://[host]:8080/blockly
+* Point you browser to http://[host]:8080/
