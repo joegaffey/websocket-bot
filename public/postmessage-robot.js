@@ -6,7 +6,7 @@ function sendMessage(msg) {
 
 function botMessageListener(event) {
   if(event.data.distance) {
-    robot_set_distance(event.data.distance);
+    robot.set_distance(event.data.distance);
   }
 }
 
