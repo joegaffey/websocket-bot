@@ -27,21 +27,19 @@ var distanceMessage = "Closest obstacle: "
 
 var domain = '*';
 var stage = new PIXI.Container();
-//var renderer = PIXI.autoDetectRenderer(512, 512);
 
 // viewport dimensions
 var baseWidth = Math.floor(window.innerWidth);
 var baseHeight = Math.floor(window.innerHeight);
 // scene dimensions
-var projectedWidth = 600;
-var projectedHeight = 600;
+var projectedWidth = 450;
+var projectedHeight = 450;
 // viewport aspect ratio
 var aspectRatio = baseWidth / baseHeight;
 // renderer acctual dimensions
 var rendererWidth = projectedWidth * aspectRatio;
 var rendererHeight = projectedHeight;
 renderer = PIXI.autoDetectRenderer(rendererWidth, rendererHeight, { view: document.getElementById("stage") });
-
 
 var botImgUrl = './media/robot.png';
 var obsImgUrl = './media/cone.png';
@@ -77,7 +75,7 @@ var distanceText = new PIXI.Text(distanceMessage + distance, distanceStyle);
 if(window.location.hash.substring(1) === "keyboard")
   document.addEventListener('keydown', keyDownHandler, false);
 
-document.body.appendChild(renderer.view);
+document.getElementById("sim").appendChild(renderer.view);
 
 PIXI.loader
   .add(botImgUrl)
@@ -288,5 +286,5 @@ function messageListener(event) {
   }
 }
 
-if(window.self !== window.top)
+// if(window.self !== window.top)
   addEventListener('message', messageListener);
