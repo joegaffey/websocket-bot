@@ -1,43 +1,3 @@
-<!DOCTYPE html>
-<meta name="robots" content="noindex">
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
-<title>Robot Control Simulation</title>
-<script src="./lib/pixi.min.js"></script>
-<script src="./keyboard.js"></script>
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  width: 100%;
-  height: 100%;
-}
-#controls {
-  padding-bottom: 0px;
-  display: none;
-}
-#stage {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  border: 0;
-}
-</style>
-</head>
-<body>
-<div id="controls">
-<button onclick="javascript:robot_reset()">Reset</button>
-<button onclick="javascript:robot_stop()">Stop</button>
-<button onclick="javascript:robot_left()">Left</button>
-<button onclick="javascript:robot_right()">Right</button>
-<button onclick="javascript:robot_forward()">Forward</button>
-<button onclick="javascript:robot_back()">Back</button>
-</div>
-<canvas id="stage"></canvas>
-<script>
-
 var actions = {};
 actions.stop = 'STOP';
 actions.forward = 'FWD';
@@ -330,7 +290,3 @@ function messageListener(event) {
 
 if(window.self !== window.top)
   addEventListener('message', messageListener);
-
-</script>
-</body>
-</html>
