@@ -1,10 +1,67 @@
 <html>
 <head>
 <link rel="stylesheet" href="main.css">
+
+<script src="./lib/socket.io-1.2.0.js"></script>
+<script src="./robot.js"></script>
+<script src="./postmessage-robot.js"></script>
+<script src="./keyboard.js"></script>
+<link rel="stylesheet" href="bot-ctrl.css">
+
+<script src="./lib/pixi.min.js"></script>
+<link rel="stylesheet" href="bot-sim.css"> 
+
 </head>
 <body>
 <div id="blocklyDiv"><iframe id="blocklyFrame" src="./blockly/index.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
-<div id="controlDiv"><iframe id="controlFrame" src="./bot-ctrl.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
-<div id="gameDiv"><iframe id="gameFrame" src="./bot-sim.html" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
+<div id="controlDiv">
+  <h4>Robot</h4>
+  <div id="controls">
+    <button onclick="robot_stop()">Stop</button>
+    <button onclick="robot_ledOn()">LED On</button>
+    <button onclick="robot_ledOff()">LED Off</button>
+    <button onclick="robot_ping()">Ping</button>
+    <br/>
+    <button onclick="robot_forward()">Forward</button>
+    <button onclick="robot_backward()">Back</button>
+    <button onclick="robot_left()">Left</button>
+    <button onclick="robot_right()">Right</button>
+  </div>
+
+  <h4>Environment</h4>
+  <button onclick="reset()">Reset</button>
+  <button id="beepButton" onclick="toggle_beep()">Beep Off</button>
+
+  <div id="env_controls">
+    <div id="distance">
+      <div id="distanceEq">
+        <table id="eqTable">
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+        </table>
+      </div>
+      <div id="distanceVal"></div>
+    </div>
+    <div id="timer">
+      Time Remaining:
+      <div id="time">00:00:00</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="gameDiv">
+   <div id="sim">
+     <canvas id="stage"></canvas>
+   </div>
+
+</div>
+
 <script src="main.js"></script>
+<script src="bot-ctrl.js"></script>
+<script src="bot-sim.js"></script>
+
 <body>

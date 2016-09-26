@@ -27,7 +27,7 @@ function messageListener(event) {
   }
 }
 
-if(window.self !== window.top)
+//if(window.self !== window.top)
   addEventListener('message', messageListener);
 
 function startTimer() {
