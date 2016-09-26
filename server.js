@@ -19,6 +19,7 @@ app.use(express.static(__dirname + '/public'));
 var server = app.listen(SERVER_PORT);
 var io = require('socket.io');
 var socketServer = io(server);
+console.log('Waiting for connections...');
 
 socketServer.on('connection', openSocket);
 socketServer.on('disconnect', closeSocket);
