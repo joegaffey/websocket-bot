@@ -1,44 +1,10 @@
 <html>
 <head>
-  <style>
-  #blocklyDiv {
-    float:left;
-    height: 800px;
-    width: 500px;
-  }
-  #controlDiv {
-    margin-left: 500px;
-    max-height: 200px;
-  }
-  #gameDiv {
-    margin-left: 500px;
-    max-width: 450px;
-    height:450px;
-  }
-  </style>
+<link rel="stylesheet" href="main.css">
 </head>
 <body>
 <div id="blocklyDiv"><iframe id="blocklyFrame" src="./blockly/index.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
 <div id="controlDiv"><iframe id="controlFrame" src="./bot-ctrl.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
 <div id="gameDiv"><iframe id="gameFrame" src="./bot-sim.html" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
-<script>
-
-var blocklyFrame = document.getElementById("blocklyFrame").contentWindow;
-var gameFrame = document.getElementById("gameFrame").contentWindow;
-var controlFrame = document.getElementById("controlFrame").contentWindow;
-var domain = "*";
-
-function messageListener(event) {
-  if(event.data.distance) {
-    blocklyFrame.postMessage(event.data, domain);
-    controlFrame.postMessage(event.data, domain);
-  }
-  if(event.data.action) {
-    gameFrame.postMessage(event.data, domain);
-    controlFrame.postMessage(event.data, domain);
-  }
-}
-
-addEventListener('message', messageListener);
-</script>
+<script src="main.js"></script>
 <body>
