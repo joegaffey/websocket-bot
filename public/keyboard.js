@@ -38,7 +38,8 @@ function wasd(key) {
     case 'd':
       robot_right();
       break;
-    default:
+    case ' ':
       robot_stop();
+      break;
   }
 }

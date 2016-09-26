@@ -1,46 +1,15 @@
-var frame_id = 'blockly';
-
 var keyEvent = null;
+var zoom = {  controls: true,
+              wheel: true,
+              startScale: 1.0,
+              maxScale: 3,
+              minScale: 0.3,
+              scaleSpeed: 1.2 };
+
 
 document.addEventListener('keydown', (event) => {
   keyEvent = event
 }, false);
-
-if(window.self !== window.top)
-  addEventListener('message', messageListener);
-
-function messageListener() {
-  if(event.data.mode) {
-    switchMode(event.data.mode);
-  }
-}
-
-processHash();
-
-window.onhashchange = function() {
-  processHash();
-};
-
-function processHash() {
-  switchMode(window.location.hash.substring(1));
-}
-
-function switchMode(mode) {
-  if(mode == 'sim')
-    loadJS("../postmessage-robot.js");
-  else if(mode == 'test')
-    loadJS("../test-robot.js");
-  else if(mode == 'robot')
-    loadJS("../websocket-robot.js");
-  console.log("Mode: " + mode);
-}
-
-function loadJS(file) {
-  var script = document.createElement("script");
-  script.type = "application/javascript";
-  script.src = file;
-  document.body.appendChild(script);
-}
 
 function get_key_char() {
   if(keyEvent)
@@ -55,16 +24,6 @@ function get_key_code() {
   else
     return '';
 }
-
-var toolboxEl = document.getElementById('toolbox');
-var zoom = {  controls: true,
-              wheel: true,
-              startScale: 1.0,
-              maxScale: 3,
-              minScale: 0.3,
-              scaleSpeed: 1.2 };
-var workspace = Blockly.inject('blocklyDiv', { media: './media/', toolbox: toolboxEl, zoom: zoom });
-Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
 
 function showCode() {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
@@ -211,4 +170,18 @@ function nextStep() {
     window.setTimeout(nextStep, nextStepDelay);
     nextStepDelay = 0;
   }
+}
+
+var workspace = null;
+setupBlockly();
+function setupBlockly() {
+  // fetch('./toolbox.xml').then(function(response) {
+  // 	return response.text();
+  // }).then(function(text) {
+	//   toolboxEl.outerHTML = text;
+  // });
+
+  var toolboxEl = document.getElementById('toolbox');
+  workspace = Blockly.inject('blockly', { media: './blockly/media/', toolbox: toolboxEl, zoom: zoom });
+  Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
 }

@@ -5,7 +5,7 @@ actions.backward = 'BACK';
 actions.right = 'RIGHT';
 actions.left = 'LEFT';
 actions.ledOn = 'LEDON';
-actions.ledOff = '`LEDOFF`';
+actions.ledOff = 'LEDOFF';
 actions.ping = 'PING';
 actions.reset = 'RESET';
 
@@ -14,6 +14,9 @@ var FINISH = -2;
 
 var CRASH_SPEECH = 'The mission has failed. The algorithm is flawed.';
 var FINISH_SPEECH = 'I have reached my destination. The algorithim is satisfactory. Thank you.';
+
+var VOICE_PITCH = 0.1;
+var VOICE_RATE = 1;
 
 robot_left = function() {
   robot_say('Bearing left');
@@ -83,24 +86,22 @@ robot_set_distance = function(newDistance) {
 
 function handleCrash() {
   console.log('Crashed');
-  if(frame_id === 'ctrl')  // dirty hack
-    robot_say(CRASH_SPEECH);
+  robot_say(CRASH_SPEECH);
 }
 
 function handleFinish() {
   console.log('Finished');
-  if(frame_id === 'ctrl') // dirty hack
-    robot_say(FINISH_SPEECH);
+  robot_say(FINISH_SPEECH);
 }
 
 var lastText = null;
 function robot_say(text) {
   if(lastText !== text) {
     lastText = text;
-    window.speechSynthesis.cancel();
+    //window.speechSynthesis.cancel();
     var speech = new SpeechSynthesisUtterance(text)
-    speech.pitch = 0.1;
-    speech.rate = 1.3;
+    speech.pitch = VOICE_PITCH;
+    speech.rate = VOICE_RATE;
     window.speechSynthesis.speak(speech);
   }
 }
