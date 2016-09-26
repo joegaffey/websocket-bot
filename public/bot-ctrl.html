@@ -28,8 +28,17 @@
 </div>
 
 <h4>Environment</h4>
-<button onclick="reset()">Reset</button>
-<button id="beepButton" onclick="toggle_beep()">Beep Off</button>
+<div>
+  <button onclick="reset()">Reset</button>
+  <button id="beepButton" onclick="toggle_beep()">Beep Off</button>
+
+  <span id="selectLabel">Select robot</span>
+  <select onChange="switchMode(this.value);">
+    <option value="robot">Physical</option>
+    <option value="sim">Simulator</option>
+    <option value="test">Test</option>
+  </select>
+</div>
 
 <div id="env_controls">
   <div id="distance">
@@ -45,7 +54,7 @@
     <div id="distanceVal"></div>
   </div>
   <div id="timer">
-    Time Remaining:
+    <span id="trLabel">Time Remaining:</span>
     <div id="time">00:00:00</div>
   </div>
 </div>
