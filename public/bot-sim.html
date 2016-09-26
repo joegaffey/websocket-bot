@@ -1,24 +1,21 @@
-<!DOCTYPE html>
-<meta name="robots" content="noindex">
 <html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <title>Robot Control Simulation</title>
 <script src="./lib/pixi.min.js"></script>
-<script src="./keyboard.js"></script>
 <link rel="stylesheet" href="bot-sim.css">
 </head>
 <body>
 <div id="controls">
-<button onclick="javascript:robot_reset()">Reset</button>
-<button onclick="javascript:robot_stop()">Stop</button>
-<button onclick="javascript:robot_left()">Left</button>
-<button onclick="javascript:robot_right()">Right</button>
-<button onclick="javascript:robot_forward()">Forward</button>
-<button onclick="javascript:robot_back()">Back</button>
+<button onclick="sim_robot_reset()">Reset</button>
+<button onclick="sim_robot_stop()">Stop</button>
+<button onclick="sim_robot_left()">Left</button>
+<button onclick="sim_robot_right()">Right</button>
+<button onclick="sim_robot_forward()">Forward</button>
+<button onclick="sim_robot_backward()">Back</button>
 </div>
-<div id="sim">
+<div id="sim" style="width:450px;height:450px;">
   <canvas id="stage"></canvas>
 </div>
 <script src="bot-sim.js"></script>

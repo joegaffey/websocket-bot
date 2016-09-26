@@ -17,12 +17,12 @@ var SPEED = 0.4,
     MIN_DISTANCE = 0,
     OBSTACLE_PADDING = 54;
 
-var gameOver = false;
+var gameOver = true;
 
 var bot = {};
 var home = {};
 var obstacles = [];
-var distance;
+var distance = 999;
 var distanceMessage = "Closest obstacle: "
 
 var domain = '*';
@@ -32,8 +32,8 @@ var stage = new PIXI.Container();
 var baseWidth = Math.floor(window.innerWidth);
 var baseHeight = Math.floor(window.innerHeight);
 // scene dimensions
-var projectedWidth = 450;
-var projectedHeight = 450;
+var projectedWidth = 600;
+var projectedHeight = 600;
 // viewport aspect ratio
 var aspectRatio = baseWidth / baseHeight;
 // renderer acctual dimensions
@@ -71,9 +71,6 @@ var distanceStyle = {
 var winText = new PIXI.Text("Mission Complete!", winStyle);
 var loseText = new PIXI.Text("Mission Failed!", loseStyle);
 var distanceText = new PIXI.Text(distanceMessage + distance, distanceStyle);
-
-if(window.location.hash.substring(1) === "keyboard")
-  document.addEventListener('keydown', keyDownHandler, false);
 
 document.getElementById("sim").appendChild(renderer.view);
 
@@ -125,7 +122,7 @@ function setup() {
   setupObstacles();
   renderer.backgroundColor = 0xDDDDDD;
   bot.anchor.set(0.5, 0.5);
-  robot_reset();
+  sim_robot_reset();
 
   stage.addChild(distanceText);
   stage.addChild(home);
@@ -153,44 +150,48 @@ function move() {
   }
 }
 
-function robot_reset() {
-  robot_stop();
+function sim_robot_reset() {
+  sim_robot_stop();
   stage.removeChild(winText);
   stage.removeChild(loseText);
   bot.x = renderer.width / 2;
   bot.y = renderer.height - 100;
   bot.rotation = 0;
-  gameOver = false;
+  gameOver = true;
 }
 
-function robot_stop() {
+function sim_robot_stop() {
   bot.speed = 0;
   bot.rotLeft = false;
   bot.rotRight = false;
 }
 
-function robot_forward() {
-  robot_stop();
+function sim_robot_forward() {
+  gameOver = false;
+  sim_robot_stop();
   bot.speed = SPEED;
 }
 
-function robot_back() {
-  robot_stop();
+function sim_robot_backward() {
+  gameOver = false;
+  sim_robot_stop();
   bot.speed = -SPEED;
 }
 
-function robot_left() {
-  robot_stop();
+function sim_robot_left() {
+  gameOver = false;
+  sim_robot_stop();
   bot.rotLeft = true;
+}
+
+function sim_robot_right() {
+  gameOver = false;
+  sim_robot_stop();
+  bot.rotRight = true;
 }
 
 function robot_say(text) {
   window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-}
-
-function robot_right() {
-  robot_stop();
-  bot.rotRight = true;
 }
 
 function play() {
@@ -198,7 +199,7 @@ function play() {
     return;
   move();
   if(homeReached() && !gameOver) {
-    robot_stop();
+    sim_robot_stop();
     stage.addChild(winText);
     parent.postMessage({'distance': FINISH }, domain);
     gameOver = true;
@@ -208,14 +209,14 @@ function play() {
   distanceText.text = distanceMessage + distance;
 
   if (distance <= MIN_DISTANCE && !gameOver) {
-    robot_stop();
+    sim_robot_stop();
     stage.addChild(loseText);
     parent.postMessage({'distance': CRASH }, domain);
     gameOver = true;
     return;
   }
-  if(window.self !== window.top && !gameOver)
-    sendMessage(distance);
+  if(!gameOver)
+    simSendMessage(distance);
 }
 
 function getMinWallDistance() {
@@ -257,34 +258,36 @@ function getMinObstacleDistance() {
   return Math.round(dist) - OBSTACLE_PADDING;
 }
 
-function sendMessage(distance){
+function simSendMessage(distance){
   parent.postMessage({'distance': distance}, domain);
 }
 
-function messageListener(event) {
+function simMessageListener(event) {
+  if(event.data.action && gameOver) {
+    gameOver = false;
+  }
   switch(event.data.action) {
     case actions.stop:
-        robot_stop();
+        sim_robot_stop();
         break;
     case actions.forward:
-        robot_forward();
+        sim_robot_forward();
         break;
     case actions.backward:
-        robot_back();
+        sim_robot_back();
         break;
     case actions.right:
-        robot_right();
+        sim_robot_right();
         break;
     case actions.left:
-        robot_left();
+        sim_robot_left();
         break;
     case actions.reset:
-        robot_reset();
+        sim_robot_reset();
         break;
     default:
       break;
   }
 }
 
-// if(window.self !== window.top)
-  addEventListener('message', messageListener);
+addEventListener('message', simMessageListener);

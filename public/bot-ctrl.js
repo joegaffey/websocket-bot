@@ -1,34 +1,39 @@
-var frame_id = 'ctrl';
-
-var colors = ['red','orange','green','green','green'];
-
-var distanceValEl = document.getElementById('distanceVal');
-var beepButtonEl = document.getElementById('beepButton');
-var eqCells = document.querySelectorAll('table#eqTable td');
-
 var AUDIO_VOLUME = 0.02;
 var REFRESH_DELAY = 1000;
-
-var audio_vol = AUDIO_VOLUME;
 
 var GAME_TIME = 600000;
 var WARNING_TIME = 120000;
 var DANGER_TIME = 60000;
 
-var startTime;
+var audio_vol = AUDIO_VOLUME;
 var timerStopped = true;
-var timeEl = document.getElementById('time');
+var startTime;
+var colors = ['red','orange','green','green','green'];
 
-function messageListener(event) {
+var distanceValEl = document.getElementById('distanceVal');
+var beepButtonEl = document.getElementById('beepButton');
+var timeEl = document.getElementById('time');
+var eqCells = document.querySelectorAll('table#eqTable td');
+
+function ctrlMessageListener(event) {
   if(event.data.action && timerStopped) {
+    console.log(event.data.action);
     if(![actions.stop,  actions.reset].includes(event.data.action)) {
       startTimer();
     }
   }
 }
 
-//if(window.self !== window.top)
-  addEventListener('message', messageListener);
+addEventListener('message', ctrlMessageListener);
+
+document.addEventListener('visibilitychange', function(){
+  if (document.hidden) {
+    audio_vol = 0;
+  }
+  else {
+    audio_vol = AUDIO_VOLUME;
+  }
+},false);
 
 function startTimer() {
   timerStopped = false;
@@ -71,15 +76,6 @@ o.connect(g);
 g.connect(ctx.destination);
 o.start(0);
 
-document.addEventListener('visibilitychange', function(){
-    if (document.hidden) {
-      audio_vol = 0;
-    }
-    else {
-      audio_vol = AUDIO_VOLUME;
-    }
-},false);
-
 var beepOn = false;
 function toggle_beep() {
   if(beepOn)
@@ -97,8 +93,6 @@ function turnBeepOn() {
   beepOn = true;
   beepButtonEl.innerHTML = 'Beep Off';
 }
-
-document.addEventListener('keydown', keyDownHandler, false);
 
 setInterval(function() {
   var distance = robot_get_distance();
@@ -129,31 +123,4 @@ function beep(step) {
   o.frequency.value = ((5 - step) * (5 - step) * 100);
   g.gain.value = audio_vol * (5 - step);
   setTimeout(function(){ g.gain.value = 0; }, 100);
-}
-
-processHash();
-
-window.onhashchange = function() {
-  processHash();
-};
-
-function processHash() {
-  switchMode(window.location.hash.substring(1));
-}
-
-function switchMode(mode) {
-  if(mode == 'sim')
-    loadJS("./postmessage-robot.js");
-  else if(mode == 'test')
-    loadJS("./test-robot.js");
-  else if(mode == 'robot')
-    loadJS("./websocket-robot.js");
-  console.log("Mode: " + mode);
-}
-
-function loadJS(file) {
-  var script = document.createElement("script");
-  script.type = "application/javascript";
-  script.src = file;
-  document.body.appendChild(script);
 }

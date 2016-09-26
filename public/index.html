@@ -1,20 +1,39 @@
 <html>
 <head>
 <link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="bot-ctrl.css">
+<link rel="stylesheet" href="bot-sim.css">
 
-<script src="./lib/socket.io-1.2.0.js"></script>
+<script src="./blockly/blockly_compressed.js"></script>
+<script src="./blockly/blocks_compressed.js"></script>
+<script src="./blockly/javascript_compressed.js"></script>
+<script src="./blockly/msg/js/en.js"></script>
+<script src="./blockly/acorn_interpreter.js"></script>
+
+<script src="./robot_blocks.js"></script>
 <script src="./robot.js"></script>
 <script src="./postmessage-robot.js"></script>
 <script src="./keyboard.js"></script>
-<link rel="stylesheet" href="bot-ctrl.css">
 
+<script src="./lib/socket.io-1.2.0.js"></script>
 <script src="./lib/pixi.min.js"></script>
-<link rel="stylesheet" href="bot-sim.css"> 
-
 </head>
 <body>
-<div id="blocklyDiv"><iframe id="blocklyFrame" src="./blockly/index.html#sim" height="100%" width="100%" frameBorder="0" scrolling="no"></iframe></div>
-<div id="controlDiv">
+
+<div id="blockly-region">
+  <p>
+    <button onclick="showCode()">Show code</button>
+    <button onclick="runCode()">Execute</button>
+    <button onclick="halt()">Halt</button>
+    <button onclick="downloadXML()">Export</button>
+    <input id="fileInput" type="file" style="display:none;" onchange="fileSelected(this)"/>
+    <input type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
+  </p>
+
+  <div id="blockly" style="height: 600px; width: 480px;"></div>
+</div>
+
+<div id="control-region">
   <h4>Robot</h4>
   <div id="controls">
     <button onclick="robot_stop()">Stop</button>
@@ -50,18 +69,82 @@
       <div id="time">00:00:00</div>
     </div>
   </div>
-
 </div>
 
-<div id="gameDiv">
+<div id="sim-region">
    <div id="sim">
      <canvas id="stage"></canvas>
    </div>
-
 </div>
 
-<script src="main.js"></script>
+<!--  Start Blockly XML -->
+<xml id="toolbox" style="display: none">
+  <category name="Robot">
+    <block type="stop"></block>
+    <block type="turn_left"></block>
+    <block type="turn_right"></block>
+    <block type="forward"></block>
+    <block type="backward"></block>
+    <block type="get_distance"></block>
+    <block type="led_on"></block>
+    <block type="led_off"></block>
+    <block type="ping"></block>
+  </category>
+
+  <category name="Logic">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+  </category>
+
+  <category name="Flow">
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <block type="math_number">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+    <block type="controls_whileUntil"></block>
+    <block type="wait"></block>
+  </category>
+
+  <category name="Math">
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="math_single"></block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+    <block type="math_random_float"></block>
+  </category>
+
+  <category name="Keyboard">
+    <block type="get_key_char"></block>
+    <block type="get_key_code"></block>
+  </category>
+
+  <category name="Text">
+    <block type="text_print"></block>
+    <block type="text"></block>
+  </category>
+</xml>
+
+<xml id="startBlocks" style="display: none"></xml>
+<!--  End Blockly XML -->
+
+<script src="blockly-bot.js"></script>
 <script src="bot-ctrl.js"></script>
 <script src="bot-sim.js"></script>
-
-<body>
+</body>

@@ -2,14 +2,14 @@
 <html>
 <head>
   <title>Blockly Robot Controller</title>
-  <script src="./blockly_compressed.js"></script>
-  <script src="./blocks_compressed.js"></script>
-  <script src="./javascript_compressed.js"></script>
-  <script src="./msg/js/en.js"></script>
-  <script src="./acorn_interpreter.js"></script>
+  <script src="./blockly/blockly_compressed.js"></script>
+  <script src="./blockly/blocks_compressed.js"></script>
+  <script src="./blockly/javascript_compressed.js"></script>
+  <script src="./blockly/msg/js/en.js"></script>
+  <script src="./blockly/acorn_interpreter.js"></script>
   <script src="./robot_blocks.js"></script>
-  <script src="../lib/socket.io-1.2.0.js"></script>
-  <script src="../robot.js"></script>
+  <script src="./lib/socket.io-1.2.0.js"></script>
+  <script src="./robot.js"></script>
 </head>
 <body>
 
@@ -22,7 +22,7 @@
   <input type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
 </p>
 
-<div id="blocklyDiv" style="height: 600px; width: 480px;"></div>
+<div id="blockly" style="height: 600px; width: 800px;"></div>
 
 <xml id="toolbox" style="display: none">
   <category name="Robot">
@@ -90,5 +90,6 @@
 <xml id="startBlocks" style="display: none"></xml>
 
 <script src="blockly-bot.js"></script>
+<script src="mode.js"></script>
 </body>
 </html>

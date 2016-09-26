@@ -1,22 +1,14 @@
-#blocklyDiv {
+#blockly-region {
   float:left;
   height: 800px;
   width: 500px;
 }
-#controlDiv {
+#control-region {
   margin-left: 500px;
   max-height: 200px;
 }
-#gameDiv {
+#sim-region {
   margin-left: 500px;
   max-width: 450px;
   height:450px;
-}
-#sim {
-  width: 100%;
-  width: 100%;
-}
-#stage {
-  width: 100%;
-  width: 100%;
 }
