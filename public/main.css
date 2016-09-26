@@ -1,0 +1,14 @@
+#blocklyDiv {
+  float:left;
+  height: 800px;
+  width: 500px;
+}
+#controlDiv {
+  margin-left: 500px;
+  max-height: 200px;
+}
+#gameDiv {
+  margin-left: 500px;
+  max-width: 450px;
+  height:450px;
+}
