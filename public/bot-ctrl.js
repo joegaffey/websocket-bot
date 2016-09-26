@@ -18,7 +18,7 @@ var eqCells = document.querySelectorAll('table#eqTable td');
 function ctrlMessageListener(event) {
   if(event.data.action && timerStopped) {
     console.log(event.data.action);
-    if(![actions.stop,  actions.reset].includes(event.data.action)) {
+    if(![robot.actions.stop,  robot.actions.reset].includes(event.data.action)) {
       startTimer();
     }
   }
@@ -61,7 +61,7 @@ function pad(num) {
 
 function reset() {
   timerStopped = true;
-  robot_reset();
+  robot.reset();
   turnBeepOff();
   time.innerHTML = "00:00:00";
 }
@@ -95,7 +95,7 @@ function turnBeepOn() {
 }
 
 setInterval(function() {
-  var distance = robot_get_distance();
+  var distance = robot.get_distance();
   if(distance < 0)
     timerStopped = true;
   distanceValEl.textContent = distance;

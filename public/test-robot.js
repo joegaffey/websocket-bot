@@ -3,5 +3,5 @@ function sendMessage(msg) {
 }
 
 setInterval(function() {
-  robot_set_distance(Math.floor(Math.random() * 100));
+  robot.set_distance(Math.floor(Math.random() * 100));
 }, 1000);

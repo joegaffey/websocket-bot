@@ -1,14 +1,3 @@
-var actions = {};
-actions.stop = 'STOP';
-actions.forward = 'FWD';
-actions.backward = 'BACK';
-actions.right = 'RIGHT';
-actions.left = 'LEFT';
-actions.ledOn = 'LEDON';
-actions.ledOff = '`LEDOFF`';
-actions.ping = 'PING';
-actions.reset = 'RESET';
-
 var CRASH = -1;
 var FINISH = -2;
 
@@ -267,22 +256,22 @@ function simMessageListener(event) {
     gameOver = false;
   }
   switch(event.data.action) {
-    case actions.stop:
+    case robot.actions.stop:
         sim_robot_stop();
         break;
-    case actions.forward:
+    case robot.actions.forward:
         sim_robot_forward();
         break;
-    case actions.backward:
-        sim_robot_back();
+    case robot.actions.backward:
+        sim_robot_backward();
         break;
-    case actions.right:
+    case robot.actions.right:
         sim_robot_right();
         break;
-    case actions.left:
+    case robot.actions.left:
         sim_robot_left();
         break;
-    case actions.reset:
+    case robot.actions.reset:
         sim_robot_reset();
         break;
     default:

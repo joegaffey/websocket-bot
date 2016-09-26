@@ -103,48 +103,53 @@ function initApi(interpreter, scope) {
   };
   interpreter.setProperty(scope, 'wait', interpreter.createNativeFunction(wrapper));
 
+  // var wrapper = function() {
+  //   return interpreter.createPrimitive(robot);
+  // };
+  // interpreter.setProperty(scope, 'robot', interpreter.createPrimitive(wrapper));
+
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_left());
+    return interpreter.createPrimitive(robot.left());
   };
   interpreter.setProperty(scope, 'robot_left', interpreter.createNativeFunction(wrapper));
 
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_right());
+    return interpreter.createPrimitive(robot.right());
   };
   interpreter.setProperty(scope, 'robot_right', interpreter.createNativeFunction(wrapper));
 
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_forward());
+    return interpreter.createPrimitive(robot.forward());
   };
   interpreter.setProperty(scope, 'robot_forward', interpreter.createNativeFunction(wrapper));
 
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_backward());
+    return interpreter.createPrimitive(robot.backward());
   };
   interpreter.setProperty(scope, 'robot_backward', interpreter.createNativeFunction(wrapper));
 
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_stop());
+    return interpreter.createPrimitive(robot.stop());
   };
   interpreter.setProperty(scope, 'robot_stop', interpreter.createNativeFunction(wrapper));
 
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_ledOn());
+    return interpreter.createPrimitive(robot.ledOn());
   };
   interpreter.setProperty(scope, 'robot_ledOn', interpreter.createNativeFunction(wrapper));
 
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_ledOff());
+    return interpreter.createPrimitive(robot.ledOff());
   };
   interpreter.setProperty(scope, 'robot_ledOff', interpreter.createNativeFunction(wrapper));
 
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_get_distance());
+    return interpreter.createPrimitive(robot.get_distance());
   };
   interpreter.setProperty(scope, 'robot_get_distance', interpreter.createNativeFunction(wrapper));
 
   var wrapper = function() {
-    return interpreter.createPrimitive(robot_ping());
+    return interpreter.createPrimitive(robot.ping());
   };
   interpreter.setProperty(scope, 'robot_ping', interpreter.createNativeFunction(wrapper));
 

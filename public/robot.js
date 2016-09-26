@@ -1,107 +1,110 @@
-var actions = {};
-actions.stop = 'STOP';
-actions.forward = 'FWD';
-actions.backward = 'BACK';
-actions.right = 'RIGHT';
-actions.left = 'LEFT';
-actions.ledOn = 'LEDON';
-actions.ledOff = 'LEDOFF';
-actions.ping = 'PING';
-actions.reset = 'RESET';
+var robot = new function() {
 
-var CRASH = -1;
-var FINISH = -2;
+  this.actions = {};
+  this.actions.stop = 'STOP';
+  this.actions.forward = 'FWD';
+  this.actions.backward = 'BACK';
+  this.actions.right = 'RIGHT';
+  this.actions.left = 'LEFT';
+  this.actions.ledOn = 'LEDON';
+  this.actions.ledOff = 'LEDOFF';
+  this.actions.ping = 'PING';
+  this.actions.reset = 'RESET';
 
-var CRASH_SPEECH = 'The mission has failed. The algorithm is flawed.';
-var FINISH_SPEECH = 'I have reached my destination. The algorithim is satisfactory. Thank you.';
+  var CRASH = -1;
+  var FINISH = -2;
 
-var VOICE_PITCH = 0.1;
-var VOICE_RATE = 1;
+  var CRASH_SPEECH = 'The mission has failed. The algorithm is flawed.';
+  var FINISH_SPEECH = 'I have reached my destination. The algorithim is satisfactory. Thank you.';
 
-robot_left = function() {
-  robot_say('Bearing left');
-  safeSend(actions.left);
-};
+  var VOICE_PITCH = 0.1;
+  var VOICE_RATE = 1;
 
-robot_right = function() {
-  robot_say('Bearing right');
-  safeSend(actions.right);
-};
+  this.left = function() {
+    robot_say('Bearing left');
+    safeSend(this.actions.left);
+  };
 
-robot_forward = function() {
-  robot_say('Advancing');
-  safeSend(actions.forward);
-};
+  this.right = function() {
+    robot_say('Bearing right');
+    safeSend(this.actions.right);
+  };
 
-robot_backward = function() {
-  robot_say('Reversing');
-  safeSend(actions.backward);
-};
+  this.forward = function() {
+    robot_say('Advancing');
+    safeSend(this.actions.forward);
+  };
 
-robot_ledOn = function() {
-  robot_say('LED on');
-  safeSend(actions.ledOn);
-};
+  this.backward = function() {
+    robot_say('Reversing');
+    safeSend(this.actions.backward);
+  };
 
-robot_ledOff = function() {
-  robot_say('LED off');
-  safeSend(actions.ledOff);
-};
+  this.ledOn = function() {
+    robot_say('LED on');
+    safeSend(this.actions.ledOn);
+  };
 
-robot_stop = function() {
-  safeSend(actions.stop);
-};
+  this.ledOff = function() {
+    robot_say('LED off');
+    safeSend(this.actions.ledOff);
+  };
 
-robot_ping = function() {
-  robot_say('Ping');
-  safeSend(actions.ping);
-};
+  this.stop = function() {
+    safeSend(this.actions.stop);
+  };
 
-robot_reset = function() {
-  robot_say('Rebooting');
-  safeSend(actions.reset);
-};
+  this.ping = function() {
+    robot_say('Ping');
+    safeSend(this.actions.ping);
+  };
 
-var lastMessage = null;
-function safeSend(message) {
-  if(message !== lastMessage)
-    sendMessage(message);
-  lastMessage = message;
-}
+  this.reset = function() {
+    robot_say('Rebooting');
+    safeSend(this.actions.reset);
+  };
 
-robot_get_distance = function() {
-  return distance;
-};
+  this.get_distance = function() {
+    return distance;
+  };
 
-var distance = 999;
-robot_set_distance = function(newDistance) {
-  if(distance !== newDistance) {
-    distance = newDistance;
-    if(distance === CRASH)
-      handleCrash();
-    else if(distance === FINISH)
-      handleFinish();
+  var distance = 999;
+  this.set_distance = function(newDistance) {
+    if(distance !== newDistance) {
+      distance = newDistance;
+      if(distance === CRASH)
+        handleCrash();
+      else if(distance === FINISH)
+        handleFinish();
+    }
+  };
+
+  var lastMessage = null;
+  function safeSend(message) {
+    if(message !== lastMessage)
+      sendMessage(message);
+    lastMessage = message;
   }
-}
 
-function handleCrash() {
-  console.log('Crashed');
-  robot_say(CRASH_SPEECH);
-}
-
-function handleFinish() {
-  console.log('Finished');
-  robot_say(FINISH_SPEECH);
-}
-
-var lastText = null;
-function robot_say(text) {
-  if(lastText !== text) {
-    lastText = text;
-    //window.speechSynthesis.cancel();
-    var speech = new SpeechSynthesisUtterance(text)
-    speech.pitch = VOICE_PITCH;
-    speech.rate = VOICE_RATE;
-    window.speechSynthesis.speak(speech);
+  function handleCrash() {
+    console.log('Crashed');
+    robot_say(CRASH_SPEECH);
   }
-}
+
+  function handleFinish() {
+    console.log('Finished');
+    robot_say(FINISH_SPEECH);
+  }
+
+  var lastText = null;
+  function robot_say(text) {
+    if(lastText !== text) {
+      lastText = text;
+      //window.speechSynthesis.cancel();
+      var speech = new SpeechSynthesisUtterance(text)
+      speech.pitch = VOICE_PITCH;
+      speech.rate = VOICE_RATE;
+      window.speechSynthesis.speak(speech);
+    }
+  }
+};
