@@ -8,38 +8,36 @@ function keyDownHandler(event) {
 function arrowDown(keyCode) {
   switch(keyCode) {
     case 38:
-      robot_forward();
+      robot.forward();
       break;
     case 40:
-      robot_backward();
+      robot.backward();
       break;
     case 37:
-      robot_left();
+      robot.left();
       break;
     case 39:
-      robot_right();
+      robot.right();
       break;
-    default:
-      robot_stop();
   }
 }
 
 function wasd(key) {
   switch(key) {
     case 'w':
-      robot_forward();
+      robot.forward();
       break;
     case 's':
-      robot_backward();
+      robot.backward();
       break;
     case 'a':
-      robot_left();
+      robot.left();
       break;
     case 'd':
-      robot_right();
+      robot.right();
       break;
     case ' ':
-      robot_stop();
+      robot.stop();
       break;
   }
 }

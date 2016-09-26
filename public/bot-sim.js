@@ -14,7 +14,6 @@ var obstacles = [];
 var distance = 999;
 var distanceMessage = "Closest obstacle: "
 
-var domain = '*';
 var stage = new PIXI.Container();
 
 // viewport dimensions
@@ -190,7 +189,7 @@ function play() {
   if(homeReached() && !gameOver) {
     sim_robot_stop();
     stage.addChild(winText);
-    parent.postMessage({'distance': FINISH }, domain);
+    parent.postMessage({'distance': FINISH }, '*');
     gameOver = true;
     return;
   }
@@ -200,7 +199,7 @@ function play() {
   if (distance <= MIN_DISTANCE && !gameOver) {
     sim_robot_stop();
     stage.addChild(loseText);
-    parent.postMessage({'distance': CRASH }, domain);
+    parent.postMessage({'distance': CRASH }, '*');
     gameOver = true;
     return;
   }
@@ -248,7 +247,7 @@ function getMinObstacleDistance() {
 }
 
 function simSendMessage(distance){
-  parent.postMessage({'distance': distance}, domain);
+  parent.postMessage({'distance': distance}, '*');
 }
 
 function simMessageListener(event) {

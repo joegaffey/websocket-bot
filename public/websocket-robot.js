@@ -1,9 +1,11 @@
-var socket = io();
+var wsBot = new function() {
+  var socket = io();
 
-function sendMessage(msg) {
-  socket.emit('action', msg);
-}
+  this.sendMessage = function(msg) {
+    socket.emit('action', msg);
+  }
 
-socket.on('distance', function (data) {
-  robot_set_distance(parseInt(data));
-});
+  socket.on('distance', function (data) {
+    robot_set_distance(parseInt(data));
+  });
+};

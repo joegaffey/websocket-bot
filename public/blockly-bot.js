@@ -103,11 +103,6 @@ function initApi(interpreter, scope) {
   };
   interpreter.setProperty(scope, 'wait', interpreter.createNativeFunction(wrapper));
 
-  // var wrapper = function() {
-  //   return interpreter.createPrimitive(robot);
-  // };
-  // interpreter.setProperty(scope, 'robot', interpreter.createPrimitive(wrapper));
-
   var wrapper = function() {
     return interpreter.createPrimitive(robot.left());
   };
