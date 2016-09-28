@@ -6,6 +6,6 @@ var wsBot = new function() {
   }
 
   socket.on('distance', function (data) {
-    robot_set_distance(parseInt(data));
+    robot.set_distance(parseInt(data));
   });
 };
