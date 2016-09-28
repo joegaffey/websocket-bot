@@ -153,6 +153,16 @@ function initApi(interpreter, scope) {
   };
   interpreter.setProperty(scope, 'robot_set_speed', interpreter.createNativeFunction(wrapper));
 
+  var wrapper = function(speech) {
+    return interpreter.createPrimitive(robot.robot_say(speech));
+  };
+  interpreter.setProperty(scope, 'robot_say', interpreter.createNativeFunction(wrapper));
+
+  var wrapper = function() {
+    return interpreter.createPrimitive(robot.robot_say_random());
+  };
+  interpreter.setProperty(scope, 'robot_say_random', interpreter.createNativeFunction(wrapper));
+
   var wrapper = function() {
     return interpreter.createPrimitive(get_key_char());
   };
