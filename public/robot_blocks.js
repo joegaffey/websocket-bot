@@ -143,6 +143,24 @@ Blockly.JavaScript['led_off'] = function(block) {
   return code;
 };
 
+Blockly.Blocks['set_speed'] = {
+  init: function() {
+    this.appendDummyInput().appendField("set_speed");
+    this.appendValueInput("speed").setCheck("Number");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(35);
+    this.setTooltip('Set the robot speed (0..255)');
+  }
+};
+
+Blockly.JavaScript['set_speed'] = function(block) {
+  var value_speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = 'robot_set_speed(' + value_speed + ');\n';
+  return code;
+};
+
 Blockly.Blocks['get_key_char'] = {
   init: function() {
     this.appendDummyInput().appendField("get_key_char");

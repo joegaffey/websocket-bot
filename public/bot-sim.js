@@ -1,7 +1,7 @@
 var CRASH = -1;
 var FINISH = -2;
 
-var SPEED = 0.4,
+var SPEED = 1,
     SPEED_TO_ROT = 30,
     MIN_DISTANCE = 0,
     OBSTACLE_PADDING = 54;
@@ -254,6 +254,10 @@ function simMessageListener(event) {
   if(event.data.action && gameOver) {
     gameOver = false;
   }
+  if(event.data.action && event.data.action.includes("SPEED")) {
+    var speedStr = event.data.action.substring(6);
+    SPEED = parseFloat(speedStr / 255);
+  }
   switch(event.data.action) {
     case robot.actions.stop:
         sim_robot_stop();
@@ -273,8 +277,6 @@ function simMessageListener(event) {
     case robot.actions.reset:
         sim_robot_reset();
         break;
-    default:
-      break;
   }
 }
 

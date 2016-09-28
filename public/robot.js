@@ -10,6 +10,7 @@ var robot = new function() {
   this.actions.ledOff = 'LEDOFF';
   this.actions.ping = 'PING';
   this.actions.reset = 'RESET';
+  this.actions.speed = 'SPEED';
 
   var CRASH = -1;
   var FINISH = -2;
@@ -62,6 +63,11 @@ var robot = new function() {
   this.reset = function() {
     robot_say('Rebooting');
     safeSend(this.actions.reset);
+  };
+
+  this.set_speed = function(speed) {
+    robot_say('Speed is ' + speed);
+    safeSend(this.actions.speed + ' ' + speed);
   };
 
   this.get_distance = function() {
