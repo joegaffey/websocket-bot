@@ -161,6 +161,40 @@ Blockly.JavaScript['set_speed'] = function(block) {
   return code;
 };
 
+Blockly.Blocks['say'] = {
+  init: function() {
+    this.appendDummyInput().appendField("say");
+    this.appendValueInput("speech");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(35);
+    this.setTooltip('Say something cool');
+  }
+};
+
+Blockly.JavaScript['say'] = function(block) {
+  var value_speech = Blockly.JavaScript.valueToCode(block, 'speech', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = 'robot_say(' + value_speech + ');\n';
+  return code;
+};
+
+Blockly.Blocks['say_random'] = {
+  init: function() {
+    this.appendDummyInput().appendField("say_random");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(35);
+    this.setTooltip('What would a robot say?');
+  }
+};
+
+Blockly.JavaScript['say_random'] = function(block) {
+  var code = 'robot_say_random();\n';
+  return code;
+};
+
 Blockly.Blocks['get_key_char'] = {
   init: function() {
     this.appendDummyInput().appendField("get_key_char");
