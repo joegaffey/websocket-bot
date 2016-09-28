@@ -148,6 +148,11 @@ function initApi(interpreter, scope) {
   };
   interpreter.setProperty(scope, 'robot_ping', interpreter.createNativeFunction(wrapper));
 
+  var wrapper = function(speed) {
+    return interpreter.createPrimitive(robot.set_speed(speed));
+  };
+  interpreter.setProperty(scope, 'robot_set_speed', interpreter.createNativeFunction(wrapper));
+
   var wrapper = function() {
     return interpreter.createPrimitive(get_key_char());
   };
