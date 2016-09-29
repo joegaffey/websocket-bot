@@ -13,4 +13,8 @@ npm install express socket.io serialport
 ```javascript
 node server.js [serial port] [baud rate]
 ```
-* Point you browser to http://[host]:8080/
+* Point your browser to http://[host]:8080/
+
+Note: Requires a modern (HTML5) browser. Tested on Chrome and Firefox. 
+Speech features don't currently work on Firefox due to browser limitations.
+http://caniuse.com/#feat=speech-synthesis
