@@ -19,52 +19,57 @@ var robot = new function() {
   var VOICE_RATE = 1;
 
   this.left = function() {
-    robot_say('Bearing left');
+    this.robot_say('Bearing left');
     safeSend(this.actions.left);
   };
 
   this.right = function() {
-    robot_say('Bearing right');
+    this.robot_say('Bearing right');
     safeSend(this.actions.right);
   };
 
   this.forward = function() {
-    robot_say('Advancing');
+    this.robot_say('Advancing');
     safeSend(this.actions.forward);
   };
 
   this.backward = function() {
-    robot_say('Reversing');
+    this.robot_say('Reversing');
     safeSend(this.actions.backward);
   };
 
   this.ledOn = function() {
-    robot_say('LED on');
+    this.robot_say('LED on');
     safeSend(this.actions.ledOn);
   };
 
   this.ledOff = function() {
-    robot_say('LED off');
+    this.robot_say('LED off');
     safeSend(this.actions.ledOff);
   };
 
   this.stop = function() {
-    safeSend(this.actions.stop);
+    this.safeSend(this.actions.stop);
   };
 
   this.ping = function() {
-    robot_say('Ping');
+    this.robot_say('Ping');
     safeSend(this.actions.ping);
   };
 
   this.reset = function() {
-    window.speechSynthesis.cancel();
-    robot_say('Rebooting');
+    try {
+      window.speechSynthesis.cancel();
+    }
+    catch(err) {
+      console.log(err);
+    }
+    this.robot_say('Rebooting');
     safeSend(this.actions.reset);
   };
 
   this.set_speed = function(speed) {
-    robot_say('Speed is ' + speed);
+    this.robot_say('Speed is ' + speed);
     safeSend(this.actions.speed + ' ' + speed);
   };
 
@@ -92,12 +97,12 @@ var robot = new function() {
 
   function handleCrash() {
     console.log('Crashed');
-    robot_say(CRASH_SPEECH);
+    this.robot_say(CRASH_SPEECH);
   }
 
   function handleFinish() {
     console.log('Finished');
-    robot_say(FINISH_SPEECH);
+    this.robot_say(FINISH_SPEECH);
   }
 
   var lastText = null;
@@ -116,9 +121,14 @@ var robot = new function() {
   }
 
   function say(text) {
-    var speech = new SpeechSynthesisUtterance(text)
-    speech.pitch = VOICE_PITCH;
-    speech.rate = VOICE_RATE;
-    window.speechSynthesis.speak(speech);
+    try {
+      var speech = new SpeechSynthesisUtterance(text)
+      speech.pitch = VOICE_PITCH;
+      speech.rate = VOICE_RATE;
+      window.speechSynthesis.speak(speech);
+    }
+    catch(err) {
+      console.log(err);
+    }
   }
 };

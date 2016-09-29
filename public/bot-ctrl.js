@@ -13,7 +13,7 @@ var colors = ['red','orange','green','green','green'];
 var distanceValEl = document.getElementById('distanceVal');
 var beepButtonEl = document.getElementById('beepButton');
 var timeEl = document.getElementById('time');
-var eqCells = document.querySelectorAll('table#eqTable td');
+var eqCells = [...document.querySelectorAll('table#eqTable td')];
 
 function ctrlMessageListener(event) {
   if(event.data.action && timerStopped) {

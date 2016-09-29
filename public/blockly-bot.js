@@ -55,7 +55,6 @@ function loadXML(xml) {
   if (typeof xml != "string" || xml.length < 5) {
       alert("No Input");
       return false;
-      return;
   }
   try {
       var dom = Blockly.Xml.textToDom(xml);
