@@ -1,4 +1,4 @@
-function modeMessageListener() {
+function modeMessageListener(event) {
   var simEl = document.getElementById('sim-region');
   if(event.data.mode) {
     if(event.data.mode === 'sim')

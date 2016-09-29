@@ -178,10 +178,6 @@ function sim_robot_right() {
   bot.rotRight = true;
 }
 
-function robot_say(text) {
-  window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-}
-
 function play() {
   if(gameOver)
     return;
