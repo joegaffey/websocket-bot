@@ -15,22 +15,6 @@ var robot = new function() {
   var CRASH = -1;
   var FINISH = -2;
 
-  var CRASH_SPEECH = 'The mission has failed. The algorithm is flawed.';
-  var FINISH_SPEECH = 'I have reached my destination. The algorithim is satisfactory. Thank you.';
-
-  var ROBOT_SAYINGS = [ 'Number 5 is alive',
-                        'Danger Will Robinson',
-                        'I\'ll be back',
-                        'Bite my shiny metal...profanity omitted',
-                        'I\'m just a robot I have no fears I lack emotion And I shed no tears.',
-                        'Why did the robot cross the road? Because he was carbon bonded to the chicken!',
-                        'I\'ve seen things you people wouldn\'t believe',
-                        'I watched C-beams glitter in the dark near the Tannhäuser Gate.',
-                        'I\'ve calculated your chance of survival, but I don\'t think you\'ll like it.',
-                        'I\'m a friend of Sarah Connor. I was told she was here.',
-                        'Come with me if you want to live!',
-                        'I need your clothes, your boots and your motorcycle.'];
-
   var VOICE_PITCH = 0.1;
   var VOICE_RATE = 1;
 
@@ -74,6 +58,7 @@ var robot = new function() {
   };
 
   this.reset = function() {
+    window.speechSynthesis.cancel();
     robot_say('Rebooting');
     safeSend(this.actions.reset);
   };
