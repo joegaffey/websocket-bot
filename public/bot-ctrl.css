@@ -1,48 +1,41 @@
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  min-width: 970px;
-}
-button {
-  width: 90px;
-}
-h4 {
-  margin-top: 12px;
-  margin-bottom: 6px;
-}
 td {
   background-color: white;
   border: 2px solid green;
 }
 #selectLabel {
-  margin-left: 12px;
+  margin: 0 6px 0 12px;
 }
 #trLabel {
-  padding-top: 18px;
 }
 #env_controls {
+  display: block;
   position: relative;
-  min-height: 150px;
+  height: 70px;
 }
 #distance {
-  float: left;
+  display: block;
+  position: relative;
   width: 200px;
 }
 #timer {
-  margin-top: 12px;
+  margin-top: 8px;
   margin-left: 200px;
   width: 100%;
 }
 #distanceEq {
-  float: left;
-  margin-top: 6px;
+  position: absolute;
+  left:0;
+  top:0;
   width: 70px;
   height: 60px;
 }
 #distanceVal {
-  margin-left: 80px;
-  margin-top: 0;
+	position: absolute;
+  left: 80px;
+  top: 22px;
   color: green;
   font-size: 48pt;
+  height: 60px;
 }
 #eqTable {
   width: 100%;
@@ -51,4 +44,5 @@ td {
 #time {
   color: green;
   font-size: 32pt;
+  margin-top: 18px;
 }
