@@ -32,7 +32,7 @@
     <button onclick="halt()">Halt</button>
     <button onclick="downloadXML()">Export</button>
     <input id="fileInput" type="file" style="display:none;" onchange="fileSelected(this)"/>
-    <input type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
+    <input class="inputButton" type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
   </p>
   <div id="blockly" style="height: 600px; width: 480px;"></div>
 </div>
@@ -69,11 +69,11 @@
     <div id="distance">
       <div id="distanceEq">
         <table id="eqTable">
-          <tr><td></td></tr>
-          <tr><td></td></tr>
-          <tr><td></td></tr>
-          <tr><td></td></tr>
-          <tr><td></td></tr>
+          <tr><td class="eqBar"></td></tr>
+          <tr><td class="eqBar"></td></tr>
+          <tr><td class="eqBar"></td></tr>
+          <tr><td class="eqBar"></td></tr>
+          <tr><td class="eqBar"></td></tr>
         </table>
       </div>
       <div id="distanceVal"></div>
