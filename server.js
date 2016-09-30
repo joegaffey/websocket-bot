@@ -7,9 +7,19 @@ const SERVER_PORT = 8080;
 if(process.argv[2])
 	var portString = process.argv[2];
 
+var trace_level = -1;
+
+if(process.argv[3]){
+	trace_level = parseInt(process.argv[3]);
+}
+    
+
 if(process.argv[3]) {
 	var sp = new SerialPort(portString, { parser: SerialPort.parsers.readline('\n'), baudRate: parseInt(process.argv[3]) });
 	sp.on('data', function(data) {
+		if(trace_level > 1){
+			console.log('Received: ' + data);   
+		}        
 		socketServer.emit('distance', data);
 	});
 }
@@ -29,7 +39,10 @@ function openSocket(socket){
 
 	socket.on('action', function(data) {
     sp.write(data  + '\n');
-    console.log('Sent to robot: ' + data);
+    
+		if(trace_level > 0){
+			console.log('Sent: ' + data);
+		}
 	});
 }
 

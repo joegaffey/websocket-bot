@@ -6,6 +6,14 @@ var zoom = {  controls: true,
               minScale: 0.3,
               scaleSpeed: 1.2 };
 
+function blocklyMessageListener(event) {
+  if(event.data.program) {
+    if(event.data.program === "halt")
+			halt();
+  }
+}
+
+addEventListener('message', blocklyMessageListener);
 
 document.addEventListener('keydown', (event) => {
   keyEvent = event

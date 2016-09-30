@@ -60,6 +60,7 @@ function pad(num) {
 }
 
 function reset() {
+	parent.postMessage({'program': 'halt'}, '*');
   timerStopped = true;
   robot.reset();
   turnBeepOff();
