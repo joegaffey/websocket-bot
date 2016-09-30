@@ -24,7 +24,8 @@
 </head>
 <body>
 
-<div id="blockly-region">
+<div class="applicationHolder">
+<div class="region" id="blockly-region">
   <p>
     <button onclick="showCode()">Show code</button>
     <button onclick="runCode()">Execute</button>
@@ -33,13 +34,13 @@
     <input id="fileInput" type="file" style="display:none;" onchange="fileSelected(this)"/>
     <input type="button" value="Import" onclick="document.getElementById('fileInput').click();" />
   </p>
-
   <div id="blockly" style="height: 600px; width: 480px;"></div>
 </div>
 
-<div id="control-region">
-  <h4>Robot</h4>
-  <div id="controls">
+<div class="rhsRegions">
+<div class="region" id="control-region">
+  <h2>Robot Controls</h2>
+  <p id="controls">
     <button onclick="robot.stop()">Stop</button>
     <button onclick="robot.ledOn()">LED On</button>
     <button onclick="robot.ledOff()">LED Off</button>
@@ -49,10 +50,10 @@
     <button onclick="robot.backward()">Back</button>
     <button onclick="robot.left()">Left</button>
     <button onclick="robot.right()">Right</button>
-  </div>
+  </p>
 
-  <h4>Environment</h4>
-  <div>
+  <h2>Environment Controls</h2>
+  <p>
     <button onclick="reset()">Reset</button>
     <button id="beepButton" onclick="toggle_beep()">Beep Off</button>
 
@@ -62,7 +63,7 @@
       <option value="sim">Simulator</option>
       <option value="test">Test</option>
     </select>
-  </div>
+  </p>
 
   <div id="env_controls">
     <div id="distance">
@@ -84,10 +85,12 @@
   </div>
 </div>
 
-<div id="sim-region">
+<div class="region" id="sim-region">
    <div id="sim">
      <canvas id="stage"></canvas>
    </div>
+</div>
+</div>
 </div>
 
 <!--  Start Blockly XML -->
