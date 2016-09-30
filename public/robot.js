@@ -18,47 +18,66 @@ var robot = new function() {
   var VOICE_PITCH = 0.1;
   var VOICE_RATE = 1;
 
+  var ready = true;
+
   this.left = function() {
+    if(!ready)
+      return;
     this.robot_say('Bearing left');
     safeSend(this.actions.left);
   };
 
   this.right = function() {
+    if(!ready)
+      return;
     this.robot_say('Bearing right');
     safeSend(this.actions.right);
   };
 
   this.forward = function() {
+    if(!ready)
+      return;
     this.robot_say('Advancing');
     safeSend(this.actions.forward);
   };
 
   this.backward = function() {
+    if(!ready)
+      return;
     this.robot_say('Reversing');
     safeSend(this.actions.backward);
   };
 
   this.ledOn = function() {
+    if(!ready)
+      return;
     this.robot_say('LED on');
     safeSend(this.actions.ledOn);
   };
 
   this.ledOff = function() {
+    if(!ready)
+      return;
     this.robot_say('LED off');
     safeSend(this.actions.ledOff);
   };
 
   this.stop = function() {
+    if(!ready)
+      return;
     this.robot_say('Stopping');
     safeSend(this.actions.stop);
   };
 
   this.ping = function() {
+    if(!ready)
+      return;
     this.robot_say('Ping');
     safeSend(this.actions.ping);
   };
 
   this.reset = function() {
+    ready = true;
     try {
       if(window.speechSynthesis.pending)
 				window.speechSynthesis.cancel();
@@ -71,6 +90,8 @@ var robot = new function() {
   };
 
   this.set_speed = function(speed) {
+    if(!ready)
+      return;
     this.robot_say('Speed is ' + speed);
     safeSend(this.actions.speed + ' ' + speed);
   };
@@ -98,11 +119,13 @@ var robot = new function() {
   }
 
   function handleCrash() {
+    ready = false;
     console.log('Crashed');
     say(CRASH_SPEECH);
   }
 
   function handleFinish() {
+    ready = false;
     console.log('Finished');
     say(FINISH_SPEECH);
   }

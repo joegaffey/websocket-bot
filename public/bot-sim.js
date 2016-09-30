@@ -6,7 +6,15 @@ var SPEED = 1,
     MIN_DISTANCE = 0,
     OBSTACLE_PADDING = 54;
 
-var gameOver = true;
+// var gameOver = true;
+
+var states = {
+  RUNNING: 0,
+  GAMEOVER: 1,
+  READY: 2
+};
+
+var state = states.READY;
 
 var bot = {};
 var home = {};
@@ -145,7 +153,8 @@ function sim_robot_reset() {
   bot.x = renderer.width / 2;
   bot.y = renderer.height - 100;
   bot.rotation = 0;
-  gameOver = true;
+  //gameOver = true;
+  state = states.READY;
 }
 
 function sim_robot_stop() {
@@ -155,51 +164,67 @@ function sim_robot_stop() {
 }
 
 function sim_robot_forward() {
-  gameOver = false;
+  if(state === states.GAMEOVER)
+    return;
+  else if(state === states.READY)
+    state = states.RUNNING;
+  //gameOver = false;
   sim_robot_stop();
   bot.speed = SPEED;
 }
 
 function sim_robot_backward() {
-  gameOver = false;
+  if(state === states.GAMEOVER)
+    return;
+  else if(state === states.READY)
+    state = states.RUNNING;
+  //gameOver = false;
   sim_robot_stop();
   bot.speed = -SPEED;
 }
 
 function sim_robot_left() {
-  gameOver = false;
+  if(state === states.GAMEOVER)
+    return;
+  else if(state === states.READY)
+    state = states.RUNNING;
+  //gameOver = false;
   sim_robot_stop();
   bot.rotLeft = true;
 }
 
 function sim_robot_right() {
-  gameOver = false;
+  if(state === states.GAMEOVER)
+    return;
+  else if(state === states.READY)
+    state = states.RUNNING;
+  //gameOver = false;
   sim_robot_stop();
   bot.rotRight = true;
 }
 
 function play() {
-  if(gameOver)
+  if(state === states.GAMEOVER)
     return;
   move();
-  if(homeReached() && !gameOver) {
+  if(homeReached() && state !== states.GAMEOVER) {
     sim_robot_stop();
     stage.addChild(winText);
     parent.postMessage({'distance': FINISH }, '*');
-    gameOver = true;
+    state = states.GAMEOVER;
     return;
   }
   distance = Math.min(getMinWallDistance(), getMinObstacleDistance());
   distanceText.text = distanceMessage + distance;
 
-  if (distance <= MIN_DISTANCE && !gameOver) {
+  if (distance <= MIN_DISTANCE && state !== states.GAMEOVER) {
     sim_robot_stop();
     stage.addChild(loseText);
     parent.postMessage({'distance': CRASH }, '*');
-    gameOver = true;
+    state = states.GAMEOVER;
     return;
   }
-  if(!gameOver)
+  if(state !== states.GAMEOVER)
     simSendMessage(distance);
 }
 
@@ -247,9 +272,9 @@ function simSendMessage(distance){
 }
 
 function simMessageListener(event) {
-  if(event.data.action && gameOver) {
-    gameOver = false;
-  }
+  // if(event.data.action && gameOver) {
+  //   gameOver = false;
+  // }
   if(event.data.action && event.data.action.includes("SPEED")) {
     var speedStr = event.data.action.substring(6);
     SPEED = parseFloat(speedStr / 255);
