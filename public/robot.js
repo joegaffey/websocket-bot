@@ -49,7 +49,8 @@ var robot = new function() {
   };
 
   this.stop = function() {
-    this.safeSend(this.actions.stop);
+    this.robot_say('Stopping');
+    safeSend(this.actions.stop);
   };
 
   this.ping = function() {
@@ -59,8 +60,9 @@ var robot = new function() {
 
   this.reset = function() {
     try {
-      window.speechSynthesis.cancel();
-    }
+      if(window.speechSynthesis.pending)
+				window.speechSynthesis.cancel();
+		}
     catch(err) {
       console.log(err);
     }
@@ -97,19 +99,18 @@ var robot = new function() {
 
   function handleCrash() {
     console.log('Crashed');
-    this.robot_say(CRASH_SPEECH);
+    say(CRASH_SPEECH);
   }
 
   function handleFinish() {
     console.log('Finished');
-    this.robot_say(FINISH_SPEECH);
+    say(FINISH_SPEECH);
   }
 
   var lastText = null;
   this.robot_say = function(text) {
     if(lastText !== text) {
       lastText = text;
-      //window.speechSynthesis.cancel();
       say(text);
     }
   }
@@ -122,10 +123,12 @@ var robot = new function() {
 
   function say(text) {
     try {
-      var speech = new SpeechSynthesisUtterance(text)
+//      if(window.speechSynthesis.pending)
+//				window.speechSynthesis.cancel();
+			var speech = new SpeechSynthesisUtterance(text)
       speech.pitch = VOICE_PITCH;
       speech.rate = VOICE_RATE;
-      window.speechSynthesis.speak(speech);
+			window.speechSynthesis.speak(speech);
     }
     catch(err) {
       console.log(err);
