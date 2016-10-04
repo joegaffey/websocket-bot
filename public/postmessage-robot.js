@@ -1,14 +1,20 @@
-var pmBot = new function() {
+function PostMessageRobot() {
 
-this.sendMessage = function(msg) {
-  parent.postMessage({'action': msg}, '*');
-}
+  this.sendMessage = function(msg) {
+    parent.postMessage({'action': msg}, '*');
+  };
 
-function botMessageListener(event) {
-  if(event.data.distance) {
-    robot.set_distance(event.data.distance);
-  }
-}
+  this.start = function() {
+    addEventListener('message', botMessageListener, true);
+  };
 
-addEventListener('message', botMessageListener);
+  this.stop = function() {
+    removeEventListener('message', botMessageListener, true);
+  };
+
+  var botMessageListener = function(event)  {
+    if(event.data.distance) {
+      robot.set_distance(event.data.distance);
+    }
+  };
 };

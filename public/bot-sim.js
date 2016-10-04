@@ -6,8 +6,6 @@ var SPEED = 1,
     MIN_DISTANCE = 0,
     OBSTACLE_PADDING = 54;
 
-// var gameOver = true;
-
 var states = {
   RUNNING: 0,
   GAMEOVER: 1,
@@ -153,7 +151,6 @@ function sim_robot_reset() {
   bot.x = renderer.width / 2;
   bot.y = renderer.height - 100;
   bot.rotation = 0;
-  //gameOver = true;
   state = states.READY;
 }
 
@@ -168,7 +165,6 @@ function sim_robot_forward() {
     return;
   else if(state === states.READY)
     state = states.RUNNING;
-  //gameOver = false;
   sim_robot_stop();
   bot.speed = SPEED;
 }
@@ -178,7 +174,6 @@ function sim_robot_backward() {
     return;
   else if(state === states.READY)
     state = states.RUNNING;
-  //gameOver = false;
   sim_robot_stop();
   bot.speed = -SPEED;
 }
@@ -188,7 +183,6 @@ function sim_robot_left() {
     return;
   else if(state === states.READY)
     state = states.RUNNING;
-  //gameOver = false;
   sim_robot_stop();
   bot.rotLeft = true;
 }
@@ -198,7 +192,6 @@ function sim_robot_right() {
     return;
   else if(state === states.READY)
     state = states.RUNNING;
-  //gameOver = false;
   sim_robot_stop();
   bot.rotRight = true;
 }
@@ -267,14 +260,14 @@ function getMinObstacleDistance() {
   return Math.round(dist) - OBSTACLE_PADDING;
 }
 
+var simLastDistance = 999;
 function simSendMessage(distance){
-  parent.postMessage({'distance': distance}, '*');
+  if(distance !== simLastDistance)
+    parent.postMessage({'distance': distance}, '*');
+  simLastDistance = distance;
 }
 
 function simMessageListener(event) {
-  // if(event.data.action && gameOver) {
-  //   gameOver = false;
-  // }
   if(event.data.action && event.data.action.includes("SPEED")) {
     var speedStr = event.data.action.substring(6);
     SPEED = parseFloat(speedStr / 255);
