@@ -1,11 +1,17 @@
-var wsBot = new function() {
-  var socket = io();
+function WebsocketRobot() {
+  this.socket = io();
 
   this.sendMessage = function(msg) {
-    socket.emit('action', msg);
-  }
+    this.socket.emit('action', msg);
+  };
 
-  socket.on('distance', function (data) {
-    robot.set_distance(parseInt(data));
-  });
+  this.start = function() {
+    this.socket.on('distance', function (data) {
+      robot.set_distance(parseInt(data));
+    });
+  };
+
+  this.stop = function() {
+    this.socket.disconnect();
+  };
 };

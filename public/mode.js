@@ -13,13 +13,18 @@ function processHash() {
   switchMode(mode);
 }
 
+var botImpl = null;
 function switchMode(mode) {
+  if(botImpl && botImpl !== null)
+    botImpl.stop();
+  botImpl = null;
   if(mode === 'sim')
-    botImpl = pmBot;
+    botImpl = new PostMessageRobot();
   else if(mode === 'test')
-    botImpl = testBot;
+    botImpl = new TestRobot();
   else if(mode === 'robot')
-    botImpl = wsBot;
+    botImpl = new WebsocketRobot();
+  botImpl.start();
   console.log("Mode: " + mode);
   parent.postMessage({'mode': mode}, '*');
 
