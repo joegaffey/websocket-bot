@@ -54,11 +54,11 @@
 
   <h2>Environment Controls</h2>
   <p>
-    <button onclick="reset()">Reset</button>
-    <button id="beepButton" onclick="toggle_beep()">Beep Off</button>
+    <button id="resetButton">Reset</button>
+    <button id="beepButton">Beep Off</button>
 
     <span id="selectLabel">Select robot</span>
-    <select onChange="switchMode(this.value);">
+    <select onChange="window.location.hash = '#' + this.value">
       <option value="robot">Physical</option>
       <option value="sim">Simulator</option>
       <option value="test">Test</option>
@@ -170,5 +170,4 @@
 <script src="bot-ctrl.js"></script>
 <script src="bot-sim.js"></script>
 <script src="main.js"></script>
-<script src="mode.js"></script>
 </body>

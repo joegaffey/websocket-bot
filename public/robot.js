@@ -113,7 +113,7 @@ var robot = new function() {
 
   var lastMessage = null;
   function safeSend(message) {
-    if(message !== lastMessage)
+    if(message !== lastMessage || message === "RESET")
       botImpl.sendMessage(message);
     lastMessage = message;
   }
