@@ -1,17 +1,21 @@
 function WebsocketRobot() {
+  var listening = false;
   this.socket = io();
+
+  this.socket.on('distance', function (data) {
+    if(listening)
+      robot.set_distance(parseInt(data));
+  });
 
   this.sendMessage = function(msg) {
     this.socket.emit('action', msg);
   };
 
   this.start = function() {
-    this.socket.on('distance', function (data) {
-      robot.set_distance(parseInt(data));
-    });
+    listening = true;
   };
 
   this.stop = function() {
-    this.socket.disconnect();
+    listening = false;
   };
 };
