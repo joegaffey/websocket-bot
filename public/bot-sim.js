@@ -293,6 +293,13 @@
           sim_robot_reset();
           break;
     }
+    if(event.data.mission) {
+      if(event.data.mission === "FAILED") {
+        sim_robot_stop();
+        stage.addChild(loseText);
+        state = states.GAMEOVER;
+      }
+    }
   }
 
   addEventListener('message', simMessageListener);
