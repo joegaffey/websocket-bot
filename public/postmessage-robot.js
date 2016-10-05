@@ -1,7 +1,6 @@
 function PostMessageRobot() {
 
   this.sendMessage = function(msg) {
-    parent.postMessage({'action': msg}, '*');
   };
 
   this.start = function() {

@@ -19,6 +19,13 @@ var robot = new function() {
   var VOICE_RATE = 1;
 
   var ready = true;
+  
+  this.fail = function() {   
+    ready = false;
+    this.stop();
+    console.log('Failed');
+    this.robot_say(CRASH_SPEECH);
+  }
 
   this.left = function() {
     if(!ready)
@@ -113,8 +120,10 @@ var robot = new function() {
 
   var lastMessage = null;
   function safeSend(message) {
-    if(message !== lastMessage || message === "RESET")
+    if(message !== lastMessage || message === "RESET") {
       botImpl.sendMessage(message);
+      parent.postMessage({'action': message}, '*');
+    }
     lastMessage = message;
   }
 
